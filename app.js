@@ -8,7 +8,7 @@ const gifts = [
  {name:'香香脆脆的坚果',ko:'고소하고 바삭한 견과류',emoji:'🥜',zh:'给忙碌的日常加一点香香脆脆的小快乐，休息的时候慢慢享用吧。',kr:'바쁜 일상에 고소하고 바삭한 즐거움을 더해 봐요. 쉬는 시간에 천천히 즐겨 주세요.'},
  {name:'微辣魔芋爽',ko:'살짝 매콤한 곤약 간식',emoji:'🌶️',zh:'Spicy Konjac Snack！中国很受欢迎的小零食。可以尝一点点，觉得辣也不用勉强哦。',kr:'중국에서 인기 있는 Spicy Konjac Snack이에요! 조금 맛봐도 좋아요. 너무 맵다면 무리하지 말아요.'}
 ];
-// Each paragraph has a matching translation for the side-by-side reading mode.
+// Matching paragraphs follow the site-wide language.
 const letter = [
  ['亲爱的 SI EUN 姐姐：','사랑하는 SI EUN 누나에게,'],
  ['你好呀！先送上一份来自中国的问候与温暖，也想为这份礼物迟迟没能寄出，认真地向你说声抱歉。让你久等啦！','누나, 안녕하세요! 먼저 중국에서 따뜻한 안부를 전해요. 그리고 선물을 보내는 일이 많이 늦어져서 정말 미안해요. 오래 기다리게 했죠?'],
@@ -29,25 +29,24 @@ let frame = 0, arrivalTimer = 0, letterTimer = 0;
 const unlockKey='sieun-parcel-unlocked-v1';let unlocked=false;
 try{unlocked=localStorage.getItem(unlockKey)==='yes';}catch(_){}
 const trackingStages=[
- ['shanghai',438,324,'上海','상하이','包裹现在在上海，一些小快乐正在慢慢靠近你。','선물은 지금 상하이에 있어요. 작은 행복이 누나에게 다가가고 있어요.'],
- ['domestic',420,260,'中国境内运输','중국 내 운송','包裹正在中国境内运输，地图为阶段示意。','중국 내에서 이동 중이에요. 지도는 대략적인 단계 표시예요.'],
- ['transit',540,219,'国际运输中','국제 운송 중','包裹正在跨越山海，带着心意向你靠近。','선물이 바다를 건너 누나에게 향하고 있어요.'],
- ['korea',635,220,'已到韩国','한국 도착','已经来到韩国，离你又近了一点点。','한국에 도착했어요. 누나에게 한 걸음 더 가까워졌어요.'],
- ['delivery',657,242,'前往奉化','봉화로 이동 중','正前往奉化，期待与你见面的那一刻。','봉화로 가고 있어요. 누나를 만날 순간을 기다려요.'],
- ['delivered',670,251,'已送达','배송 완료','你的快乐到了！打开纸质信封，用里面的密码开启惊喜吧。','선물이 도착했어요! 종이 편지 봉투 안의 비밀번호로 선물을 열어 주세요.']
+ ['shanghai','上海','상하이','包裹现在在上海，一些小快乐正在慢慢靠近你。','선물은 지금 상하이에 있어요. 작은 행복이 누나에게 다가가고 있어요.'],
+ ['domestic','中国境内运输','중국 내 운송','包裹正在中国境内运输，地图为阶段示意。','중국 내에서 이동 중이에요. 지도는 대략적인 단계 표시예요.'],
+ ['transit','国际运输中','국제 운송 중','包裹正在跨越山海，带着心意向你靠近。','선물이 바다를 건너 누나에게 향하고 있어요.'],
+ ['korea','已到韩国','한국 도착','已经来到韩国，离你又近了一点点。','한국에 도착했어요. 누나에게 한 걸음 더 가까워졌어요.'],
+ ['delivery','前往奉化','봉화로 이동 중','正前往奉化，期待与你见面的那一刻。','봉화로 가고 있어요. 누나를 만날 순간을 기다려요.'],
+ ['delivered','已送达','배송 완료','你的快乐到了！打开纸质信封，用里面的密码开启惊喜吧。','선물이 도착했어요! 종이 편지 봉투 안의 비밀번호로 선물을 열어 주세요.']
 ];
 function showTracking(){
  cancelAnimationFrame(frame);clearTimeout(arrivalTimer);clearTimeout(letterTimer);document.querySelectorAll('dialog[open]:not(#language-welcome)').forEach(d=>d.close());scene('journey');
  $('#tracking-panel').hidden=false;$('#skip').hidden=true;$('#replay').textContent=unlocked?'↻ 重播旅程 · 다시 보기':'♡ 查看旅程 · 배송 여정';
  const config=window.PARCEL_TRACKING||{};window.parcelMap?.tracking(config);const index=Math.max(0,trackingStages.findIndex(s=>s[0]===config.stage));const stage=trackingStages[index];
- $('#plane').setAttribute('transform','translate('+stage[1]+' '+stage[2]+')');
- $('#flight-status').textContent='📦 '+window.siteLanguage.pick(stage[3]+'（示意位置）',stage[4]+' (대략적인 위치)');
- $('#tracking-title').textContent=window.siteLanguage.pick(stage[3],stage[4]);
+ $('#flight-status').textContent='📦 '+window.siteLanguage.pick(stage[1]+'（示意位置）',stage[2]+' (대략적인 위치)');
+ $('#tracking-title').textContent=window.siteLanguage.pick(stage[1],stage[2]);
  const stateText={pending:['上海 · 待寄出，等待 EMS 揽收。','상하이에서 발송 준비 중이에요.'],label_created:['运单信息已建立，等待揽收轨迹。','운송장 정보가 등록되었어요. 집하 정보를 기다려요.'],awaiting_data:['等待承运商提供轨迹，暂保留上次位置。','배송 조회 정보를 기다리는 중이에요. 마지막 위치를 유지해요.'],attention:['物流有异常或延误，保留上次确认的位置。','배송 지연 또는 예외가 있어요. 마지막 확인 위치를 표시해요.'],location_unknown:['物流已有更新，但地点尚不明确，保留上次确认的位置。','배송은 갱신되었지만 위치가 불분명해 마지막 위치를 유지해요.'],pickup:['包裹已到待领取点，尚未确认签收。','수령 장소에 도착했어요. 아직 수령 완료는 아니에요.']}[config.state];
- $('#tracking-description').textContent=window.siteLanguage.pick(...(stateText||[stage[5],stage[6]]))+(config.updatedAt?'\n'+window.siteLanguage.pick('轨迹时间：','배송 시각: ')+new Date(config.updatedAt).toLocaleString(window.siteLanguage.language==='ko'?'ko-KR':'zh-CN'):'');
+ $('#tracking-description').textContent=window.siteLanguage.pick(...(stateText||[stage[3],stage[4]]))+(config.updatedAt?'\n'+window.siteLanguage.pick('轨迹时间：','배송 시각: ')+new Date(config.updatedAt).toLocaleString(window.siteLanguage.language==='ko'?'ko-KR':'zh-CN'):'');
  const fresh=config.checkedAt?new Date(config.checkedAt).toLocaleString(window.siteLanguage.language==='ko'?'ko-KR':'zh-CN'):'';
  $('#tracking-sync').textContent=config.sync==='not_configured'?'EMS · 待寄出，等待物流接入 · 발송 및 조회 연결 준비 중':config.sync==='error'?'暂时无法更新，显示最后记录 · 갱신 불가, 마지막 기록 표시':config.sync==='ok'?'自动查询 · 자동 조회'+(fresh?' · '+fresh:''):'物流信息准备中 · 배송 정보 준비 중';
- $('#tracking-steps').replaceChildren();trackingStages.forEach((item,i)=>{const li=document.createElement('li');li.textContent=window.siteLanguage.pick(item[3],item[4]);li.className=i<index?'done':i===index?'current':'';if(i===index)li.setAttribute('aria-current','step');$('#tracking-steps').append(li);});
+ $('#tracking-steps').replaceChildren();trackingStages.forEach((item,i)=>{const li=document.createElement('li');li.textContent=window.siteLanguage.pick(item[1],item[2]);li.className=i<index?'done':i===index?'current':'';if(i===index)li.setAttribute('aria-current','step');$('#tracking-steps').append(li);});
  $('#unlock-form').hidden=unlocked;$('#return-gifts').hidden=!unlocked;
 }
 $('#unlock-form').addEventListener('submit',e=>{e.preventDefault();if($('#parcel-password').value.trim().toLowerCase()!=='sieun'){$('#unlock-error').textContent='这把小钥匙还不对哦，请再看看纸质信封。 · 비밀번호가 맞지 않아요. 편지 봉투를 다시 확인해 주세요.';$('#parcel-password').setAttribute('aria-invalid','true');return;}unlocked=true;window.parcelMusic?.unlock();try{localStorage.setItem(unlockKey,'yes');}catch(_){}$('#parcel-password').value='';$('#parcel-password').removeAttribute('aria-invalid');$('#unlock-error').textContent='';startJourney();});
@@ -55,21 +54,21 @@ $('#return-gifts').onclick=()=>{if(unlocked)scene('gifts');};
 const trackingButton=document.createElement('button');trackingButton.className='text-button';trackingButton.textContent='📦 物流位置 · 배송 위치';trackingButton.onclick=showTracking;document.querySelector('header').append(trackingButton);
 
 const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
-function scene(id){document.querySelectorAll('.scene').forEach(s=>s.hidden=s.id!==id);window.scrollTo({top:0,behavior:'instant'});}
+function scene(id){document.querySelectorAll('.scene').forEach(s=>s.hidden=s.id!==id);window.parcelPresentation?.scene(document.getElementById(id));window.scrollTo({top:0,behavior:'instant'});}
 function arrive(){window.parcelMap?.finish();if(!unlocked){showTracking();return;}cancelAnimationFrame(frame);clearTimeout(arrivalTimer);scene('arrival');}
-function startJourney(){if(!unlocked){showTracking();return;}$('#tracking-panel').hidden=true;$('#skip').hidden=false;$('#replay').textContent='↻ 重播旅程 · 다시 보기';cancelAnimationFrame(frame);clearTimeout(arrivalTimer);clearTimeout(letterTimer);document.querySelectorAll('dialog[open]:not(#language-welcome)').forEach(d=>d.close());$('#envelope').classList.remove('opening');scene('journey');window.parcelMap?.begin();const path=$('#flight-path'),len=path.getTotalLength();let start;function step(t){if(!start)start=t;const progress=Math.min((t-start)/7000,1),p=path.getPointAtLength(len*progress);$('#plane').setAttribute('transform',`translate(${p.x} ${p.y})`);window.parcelMap?.progress(progress);$('#flight-status').textContent=progress<.16?'上海出发 · 상하이에서 출발해요':progress<.85?'带着满满心意，飞越山海… · 마음을 싣고 날아가는 중…':'已抵达奉化 · 봉화에 도착했어요 ♡';if(progress<1)frame=requestAnimationFrame(step);else arrivalTimer=setTimeout(arrive,850);}if(reducedMotion){$('#flight-status').textContent='心意已送达 · 마음이 도착했어요 ♡';arrivalTimer=setTimeout(arrive,1200);}else frame=requestAnimationFrame(step);}
+function startJourney(){if(!unlocked){showTracking();return;}$('#tracking-panel').hidden=true;$('#skip').hidden=false;$('#replay').textContent='↻ 重播旅程 · 다시 보기';cancelAnimationFrame(frame);clearTimeout(arrivalTimer);clearTimeout(letterTimer);document.querySelectorAll('dialog[open]:not(#language-welcome)').forEach(d=>d.close());$('#envelope').classList.remove('opening');scene('journey');window.parcelMap?.begin();let start;function step(t){if(!start)start=t;const progress=Math.min((t-start)/7000,1);window.parcelMap?.progress(progress);$('#flight-status').textContent=progress<.16?'上海出发 · 상하이에서 출발해요':progress<.85?'带着满满心意，飞越山海… · 마음을 싣고 날아가는 중…':'已抵达奉化 · 봉화에 도착했어요 ♡';if(progress<1)frame=requestAnimationFrame(step);else arrivalTimer=setTimeout(arrive,850);}if(reducedMotion){$('#flight-status').textContent='心意已送达 · 마음이 도착했어요 ♡';arrivalTimer=setTimeout(arrive,1200);}else frame=requestAnimationFrame(step);}
 function confetti(){if(reducedMotion)return;for(let i=0;i<36;i++){const s=document.createElement('span');s.className='confetto';s.textContent=['♡','✦','🎀','✧'][i%4];s.style.cssText=`left:${Math.random()*100}%;font-size:${12+Math.random()*20}px;animation-delay:${Math.random()*.8}s`;$('#confetti').append(s);setTimeout(()=>s.remove(),4500);}}
 const giftName=g=>window.siteLanguage.pick(g.name,g.ko);
 const giftDescription=g=>window.siteLanguage.pick(g.zh,g.kr);
 const art=g=>g.img?`<img src="assets/${g.img}" alt="${giftName(g)}">`:`<div class="snack-art" aria-label="${giftName(g)}">${g.emoji}</div>`;
 function renderGifts(){ $('#gift-grid').replaceChildren();gifts.forEach((g,i)=>{const b=document.createElement('button');b.className='gift';b.style.cssText=`--tilt:${[-2,2,-1,2,-2,1,-1][i]}deg;animation-delay:${i*.1}s`;b.innerHTML=`${art(g)}<span class="number">LITTLE JOY / 0${i+1}</span><h2>${giftName(g)}</h2><p class="kr">${window.siteLanguage.pick("打开这份小心意","선물에 담긴 마음 보기")}</p>`;b.onclick=()=>{if(window.openGiftV6){window.openGiftV6(g);return;}$('#gift-detail').innerHTML=`${art(g)}<h2>${giftName(g)}</h2><p>${giftDescription(g)}</p>`;attachCulture(g);$('#gift-dialog').showModal();$('#gift-dialog').scrollTop=0;};$('#gift-grid').append(b);});}renderGifts();
-function renderLetter(lang){const root=$('#letter-content');root.replaceChildren();letter.forEach((pair,i)=>{const wrap=document.createElement('div');if(lang==='both')wrap.className='pair';const indexes=lang==='both'?[0,1]:[lang==='zh'?0:1];indexes.forEach(index=>{const p=document.createElement(i===0?'h2':'p');p.lang=index===0?'zh-CN':'ko';p.textContent=pair[index];if(i===letter.length-1)p.className='signature';wrap.append(p);});root.append(wrap);});document.querySelectorAll('[data-lang]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.lang===lang)));}
+function renderLetter(lang){const root=$('#letter-content');root.replaceChildren();letter.forEach((pair,i)=>{const wrap=document.createElement('div');const indexes=[lang==='zh'?0:1];indexes.forEach(index=>{const p=document.createElement(i===0?'h2':'p');p.lang=index===0?'zh-CN':'ko';p.textContent=pair[index];if(i===letter.length-1)p.className='signature';wrap.append(p);});root.append(wrap);});}
 function openLetter(){if(!unlocked){showTracking();return;}renderLetter(window.siteLanguage.language);$('#letter-dialog').showModal();$('#letter-dialog').scrollTop=0;}
 $('#skip').onclick=arrive;$('#replay').onclick=startJourney;
-$('#unbox').onclick=()=>{if(!unlocked){showTracking();return;}scene('gifts');confetti();};
+$('#unbox').onclick=()=>{if(!unlocked){showTracking();return;}window.parcelPresentation.unbox(()=>{scene('gifts');confetti();});};
 $('#envelope').onclick=()=>{$('#envelope').classList.add('opening');clearTimeout(letterTimer);letterTimer=setTimeout(openLetter,reducedMotion?0:400);};
 $('#letter-direct').onclick=openLetter;
-document.querySelectorAll('[data-lang]').forEach(b=>b.onclick=()=>renderLetter(b.dataset.lang));
+
 document.querySelectorAll('dialog').forEach(d=>{d.querySelector('.close').onclick=()=>d.close();d.addEventListener('click',e=>{if(e.target===d){const r=d.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)d.close();}});});
 if(unlocked){scene('gifts');}else{showTracking();}
 
