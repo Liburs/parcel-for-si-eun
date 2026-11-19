@@ -86,5 +86,15 @@ window.questVoices={
   "zh|烟雾补给已取得，神光引路觉醒。跟随逐渐延伸的青色路线返回北门。": "assets/voice/zh-1e25b4dc9823.mp3",
   "ko|연막 보급품을 얻었어요. 빛의 길잡이가 깨어나요. 천천히 이어지는 청록빛 길을 따라 북문으로 돌아가세요.": "assets/voice/ko-9efff139aec2.mp3",
   "zh|神光正在铺路，跟随青色光迹前往北门": "assets/voice/zh-3c3cda27a3b5.mp3",
-  "ko|빛이 길을 이어요. 청록빛 흔적을 따라 북문으로 가세요": "assets/voice/ko-dca4dcb1ce7e.mp3"
+  "ko|빛이 길을 이어요. 청록빛 흔적을 따라 북문으로 가세요": "assets/voice/ko-dca4dcb1ce7e.mp3",
+  "zh|冥雷落印，离开脚下光圈": "assets/voice/zh-a9bee5078927.mp3",
+  "ko|명계의 낙뢰, 발밑 원을 벗어나세요": "assets/voice/ko-42de0269b3f4.mp3",
+  "zh|怨丝缠足，短时无法奔跑": "assets/voice/zh-787cdc33d931.mp3",
+  "ko|원혼의 족쇄, 잠시 달릴 수 없어요": "assets/voice/ko-80daa5dd7d84.mp3",
+  "zh|血咒封径，绕开红色咒印": "assets/voice/zh-e93d8f2ed9cf.mp3",
+  "ko|핏빛 저주진, 붉은 문양을 피하세요": "assets/voice/ko-2749bef0dcfe.mp3",
+  "zh|逆星迷盘，小地图暂时受干扰": "assets/voice/zh-e0bb86adac7e.mp3",
+  "ko|뒤틀린 나침반, 지도가 잠시 흐려져요": "assets/voice/ko-6f5c00a40915.mp3",
+  "zh|红影断路，躲开冲刺路线": "assets/voice/zh-c48041165afb.mp3",
+  "ko|붉은 그림자의 돌진, 경로를 피하세요": "assets/voice/ko-46a0b4059375.mp3"
 };

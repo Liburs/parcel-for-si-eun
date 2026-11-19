@@ -322,5 +322,45 @@ window.questVoiceEvents={
     "ttl": 10000,
     "terminal": false,
     "priority": false
+  },
+  "冥雷落印，离开脚下光圈": {
+    "zh": "冥雷落印，离开脚下光圈",
+    "ko": "명계의 낙뢰, 발밑 원을 벗어나세요",
+    "cooldown": 20000,
+    "ttl": 10000,
+    "terminal": false,
+    "priority": false
+  },
+  "怨丝缠足，短时无法奔跑": {
+    "zh": "怨丝缠足，短时无法奔跑",
+    "ko": "원혼의 족쇄, 잠시 달릴 수 없어요",
+    "cooldown": 20000,
+    "ttl": 10000,
+    "terminal": false,
+    "priority": false
+  },
+  "血咒封径，绕开红色咒印": {
+    "zh": "血咒封径，绕开红色咒印",
+    "ko": "핏빛 저주진, 붉은 문양을 피하세요",
+    "cooldown": 20000,
+    "ttl": 10000,
+    "terminal": false,
+    "priority": false
+  },
+  "逆星迷盘，小地图暂时受干扰": {
+    "zh": "逆星迷盘，小地图暂时受干扰",
+    "ko": "뒤틀린 나침반, 지도가 잠시 흐려져요",
+    "cooldown": 20000,
+    "ttl": 10000,
+    "terminal": false,
+    "priority": false
+  },
+  "红影断路，躲开冲刺路线": {
+    "zh": "红影断路，躲开冲刺路线",
+    "ko": "붉은 그림자의 돌진, 경로를 피하세요",
+    "cooldown": 20000,
+    "ttl": 10000,
+    "terminal": false,
+    "priority": false
   }
 };
