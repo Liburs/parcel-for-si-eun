@@ -10,4 +10,6 @@ async function refreshTracking(){
  }catch{window.PARCEL_TRACKING={...window.PARCEL_TRACKING,sync:'error'};}
  window.dispatchEvent(new Event('tracking-updated'));
 }
-refreshTracking();setInterval(refreshTracking,5*60*1000);
+refreshTracking();setInterval(refreshTracking,60*1000);
+
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)refreshTracking();});

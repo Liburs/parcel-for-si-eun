@@ -1,6 +1,6 @@
 // No visible audio controls. Audio starts as soon as browser policy permits.
 (()=>{
- const audio=new Audio();audio.id='background-music';audio.hidden=true;audio.setAttribute('aria-hidden','true');document.body.append(audio);audio.preload='auto';audio.volume=.5;
+ const audio=new Audio();audio.id='background-music';audio.hidden=true;audio.setAttribute('aria-hidden','true');document.body.append(audio);audio.preload='auto';audio.volume=window.parcelAudio?.level??.5;
  const waiting=['assets/music/32-rito-night.flac'];
  const playlist=['assets/music/06-opening.flac','assets/music/20-water-temple.flac','assets/music/21-water-temple.flac','assets/music/26-sidon.flac'];
  let mode='',index=0,generation=0,retry=false;

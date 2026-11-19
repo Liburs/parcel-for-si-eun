@@ -18,9 +18,9 @@
  document.querySelector('#map-reset').onclick=fit;
  // Coordinates are approximate representative points for known broad stages.
  // Unknown domestic locations retain the last point instead of inventing a city.
- const places={shanghai:origin,transit:route[50],korea:[37.45,126.45],delivery:destination,delivered:destination};
+ const places={shanghai:origin,korea:[37.45,126.45],delivery:destination,delivered:destination};
  window.parcelMap={
-  tracking(config){last=places[config.stage]||last;parcel.setIcon(icon('📦')).setLatLng(last);parcel.bindPopup(config.stage==='domestic'?'中国境内运输，具体位置尚不确定 / 중국 내 운송, 상세 위치 미확인':'包裹阶段示意位置 · 대략적인 배송 위치');requestAnimationFrame(()=>map.invalidateSize());},
+  tracking(config){const p=config.location;const valid=p&&Number.isFinite(p.lat)&&Number.isFinite(p.lng)&&p.lat>=20&&p.lat<=55&&p.lng>=100&&p.lng<=140;last=valid?[p.lat,p.lng]:(['transit','domestic'].includes(config.stage)?last:places[config.stage]||last);parcel.setIcon(icon('📦')).setLatLng(last);parcel.bindPopup(valid?'最新扫描城市 · 최근 스캔 도시: '+String(p.name||'').replace(/[<>&]/g,'')+'<br>城市级近似位置，非GPS · 도시 단위, GPS 아님':config.stage==='domestic'||config.stage==='transit'?'中国境内运输，具体位置尚不确定 / 중국 내 운송, 상세 위치 미확인':'包裹阶段示意位置 · 대략적인 배송 위치');requestAnimationFrame(()=>map.invalidateSize());},
   begin(){parcel.setIcon(icon('✈️'));fit();},
   progress(t){const i=Math.min(100,Math.round(t*100));parcel.setLatLng(route[i]);},
   finish(){parcel.setLatLng(destination).setIcon(icon('📦'));},

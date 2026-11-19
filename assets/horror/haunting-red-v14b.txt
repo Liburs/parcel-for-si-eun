@@ -1,0 +1,1 @@
+Created with built-in OpenAI imagegen, edited from haunting-woman-v14a. Prompt: preserve face, full-body pose, hair and silhouette; change torn dress to deep crimson red, pale skin, no gore, genuinely transparent background. Project asset: assets/horror/haunting-red-v14b.png. Original source preserved in previous release.

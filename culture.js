@@ -36,9 +36,9 @@ const CULTURE_BOOKS={
  ]}
 };
 let cultureLanguage='ko';
-function openCulture(kind){
+function openCulture(kind,focus){
  if(!unlocked)return;
- const book=CULTURE_BOOKS[kind];const old=document.querySelector('#culture-dialog');if(old)old.remove();
+ const source=CULTURE_BOOKS[kind];const book={...source,chapters:source.chapters.filter(c=>focus==='standing'?!['06','07'].includes(c.title[0].slice(0,2)):focus==='mask'?!c.title[0].startsWith('05'):true)};const old=document.querySelector('#culture-dialog');if(old)old.remove();
  const d=document.createElement('dialog');d.id='culture-dialog';d.className='culture-dialog '+book.theme;
  d.innerHTML='<div class="letter-toolbar"><span>四川小旅行 · 쓰촨으로 떠나는 작은 여행</span><button class="close" aria-label="关闭文化介绍">×</button></div><div class="language-tabs"><button data-culture-lang="ko">한국어</button><button data-culture-lang="zh">中文</button><button data-culture-lang="both">中韩对照</button></div><div class="culture-body"></div>';
  document.body.append(d);d.querySelector('.close').onclick=()=>d.close();
@@ -50,3 +50,4 @@ function openCulture(kind){
  d.querySelectorAll('[data-culture-lang]').forEach(b=>b.onclick=()=>{cultureLanguage=b.dataset.cultureLang;render();d.scrollTop=0;});render();d.showModal();
 }
 function attachCulture(g){const kind=g.img==='panda.jpg'?'panda':['magnet.jpg','mask.jpg'].includes(g.img)?'sanxingdui':null;if(!kind)return;const area=document.createElement('div');area.className='culture-invite';const heading=document.createElement('h3');heading.textContent=kind==='panda'?'🐼 认识花花与她的家 · 화화와 판다기지':'✦ 认识礼物背后的三星堆 · 선물 속 싼싱두이';const p=document.createElement('p');p.textContent=kind==='panda'?'基地历史、保护故事、花花与官方地图。 / 기지의 역사, 보호 이야기, 화화와 공식 지도.':'遗址发现、古蜀故事与两件青铜文物实照。 / 유적 발견, 고대 촉 이야기와 청동 유물 사진.';const b=document.createElement('button');b.className='primary';b.textContent='展开文化小册 · 이야기 펼치기 ↗';b.onclick=()=>openCulture(kind);area.append(heading,p,b);document.querySelector('#gift-detail').append(area);}
+
