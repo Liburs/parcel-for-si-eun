@@ -78,5 +78,9 @@ window.questVoices={
   "zh|大立人神光觉醒，怨影退散": "assets/voice/zh-955ee49b1ecf.mp3",
   "ko|청동대립인의 빛이 깨어나요. 원혼이 물러가요": "assets/voice/ko-587c8ae19799.mp3",
   "zh|挣脱失败，损失十五点理智": "assets/voice/zh-0185a5c2749d.mp3",
-  "ko|탈출 실패, 정신력 15를 잃었어요": "assets/voice/ko-1cfd605bec48.mp3"
+  "ko|탈출 실패, 정신력 15를 잃었어요": "assets/voice/ko-1cfd605bec48.mp3",
+  "zh|融合鬼将你击退到起点。七秒准备，寻找补给，安全柜可以躲避。": "assets/voice/zh-a29f7c46865f.mp3",
+  "ko|융합 유령이 시작점으로 밀쳐냈어요. 준비 시간은 7초예요. 보급품을 찾고 안전한 옷장에 숨으세요.": "assets/voice/ko-02f6655a3d05.mp3",
+  "zh|幽行换位，女鬼即将转移": "assets/voice/zh-ad50105de02d.mp3",
+  "ko|유령의 도약, 유령이 곧 이동해요": "assets/voice/ko-d9983f391469.mp3"
 };

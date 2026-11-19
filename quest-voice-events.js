@@ -290,5 +290,21 @@ window.questVoiceEvents={
     "ttl": 5000,
     "priority": true,
     "terminal": false
+  },
+  "融合鬼将你击退到起点。七秒准备，寻找补给，安全柜可以躲避。": {
+    "zh": "融合鬼将你击退到起点。七秒准备，寻找补给，安全柜可以躲避。",
+    "ko": "융합 유령이 시작점으로 밀쳐냈어요. 준비 시간은 7초예요. 보급품을 찾고 안전한 옷장에 숨으세요.",
+    "cooldown": 12000,
+    "ttl": 10000,
+    "terminal": false,
+    "priority": true
+  },
+  "幽行换位，女鬼即将转移": {
+    "zh": "幽行换位，女鬼即将转移",
+    "ko": "유령의 도약, 유령이 곧 이동해요",
+    "cooldown": 12000,
+    "ttl": 10000,
+    "terminal": false,
+    "priority": false
   }
 };
