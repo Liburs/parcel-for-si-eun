@@ -82,5 +82,9 @@ window.questVoices={
   "zh|融合鬼将你击退到起点。七秒准备，寻找补给，安全柜可以躲避。": "assets/voice/zh-a29f7c46865f.mp3",
   "ko|융합 유령이 시작점으로 밀쳐냈어요. 준비 시간은 7초예요. 보급품을 찾고 안전한 옷장에 숨으세요.": "assets/voice/ko-02f6655a3d05.mp3",
   "zh|幽行换位，女鬼即将转移": "assets/voice/zh-ad50105de02d.mp3",
-  "ko|유령의 도약, 유령이 곧 이동해요": "assets/voice/ko-d9983f391469.mp3"
+  "ko|유령의 도약, 유령이 곧 이동해요": "assets/voice/ko-d9983f391469.mp3",
+  "zh|烟雾补给已取得，神光引路觉醒。跟随逐渐延伸的青色路线返回北门。": "assets/voice/zh-1e25b4dc9823.mp3",
+  "ko|연막 보급품을 얻었어요. 빛의 길잡이가 깨어나요. 천천히 이어지는 청록빛 길을 따라 북문으로 돌아가세요.": "assets/voice/ko-9efff139aec2.mp3",
+  "zh|神光正在铺路，跟随青色光迹前往北门": "assets/voice/zh-3c3cda27a3b5.mp3",
+  "ko|빛이 길을 이어요. 청록빛 흔적을 따라 북문으로 가세요": "assets/voice/ko-dca4dcb1ce7e.mp3"
 };

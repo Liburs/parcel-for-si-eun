@@ -306,5 +306,21 @@ window.questVoiceEvents={
     "ttl": 10000,
     "terminal": false,
     "priority": false
+  },
+  "烟雾补给已取得，神光引路觉醒。跟随逐渐延伸的青色路线返回北门。": {
+    "zh": "烟雾补给已取得，神光引路觉醒。跟随逐渐延伸的青色路线返回北门。",
+    "ko": "연막 보급품을 얻었어요. 빛의 길잡이가 깨어나요. 천천히 이어지는 청록빛 길을 따라 북문으로 돌아가세요.",
+    "cooldown": 20000,
+    "ttl": 10000,
+    "terminal": false,
+    "priority": false
+  },
+  "神光正在铺路，跟随青色光迹前往北门": {
+    "zh": "神光正在铺路，跟随青色光迹前往北门",
+    "ko": "빛이 길을 이어요. 청록빛 흔적을 따라 북문으로 가세요",
+    "cooldown": 20000,
+    "ttl": 10000,
+    "terminal": false,
+    "priority": false
   }
 };
