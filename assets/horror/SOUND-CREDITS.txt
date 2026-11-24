@@ -1,0 +1,6 @@
+Current jumpscare: user-supplied 突然惊吓冲击高频细节_爱给网_aigei_com.mp3.
+File: jumpscare-current-r5.mp3, copied unchanged.
+SHA256: 82C8CEE5B85BEE14E970629687389F3B33149A1CF06785278A487240EAA84D74
+Old Mid 1 and synthesized jumpscare fallback have been removed.
+Footsteps and laughter are procedural synthesis in quest-effects.js.
+Apparition image is an original imagegen-generated asset based on the user's visual reference.

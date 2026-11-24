@@ -1,0 +1,94 @@
+/* 解锁前的「物流实况」卡片。独立文件，不改动 style.css / adventure.css。
+   地图由页面顶部 map.js 提供，本卡片只放快递信息与轨迹。 */
+.live-parcel{
+  max-width:930px;margin:26px auto 0;padding:22px 24px 16px;
+  background:#fffdfb;border:1px solid var(--line,#edd8de);border-radius:22px;
+  box-shadow:0 14px 40px #a76c7a12;color:var(--ink,#624952);
+}
+.live-head{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px 14px;margin-bottom:14px}
+.live-head-main{display:flex;align-items:center;flex-wrap:wrap;gap:8px 12px;min-width:0}
+.live-head-meta{display:flex;align-items:center;gap:10px;margin-left:auto}
+.live-title{font-family:'Noto Serif SC',serif;font-size:19px;margin:0;font-weight:600;letter-spacing:.3px}
+.live-live{
+  display:inline-flex;align-items:center;gap:6px;font-size:10px;letter-spacing:1px;
+  color:#a94568;background:#fdeef4;border:1px solid #f3cfdd;border-radius:999px;padding:4px 10px;
+}
+.live-live i{width:7px;height:7px;border-radius:50%;background:#e0608a;box-shadow:0 0 0 0 #e0608a66;animation:live-beat 2.2s infinite}
+.live-updated{font-size:11px;color:var(--muted,#967d83);white-space:nowrap}
+.live-refresh{
+  border:1px solid var(--line,#edd8de);background:#fff8f6;color:#a26b7c;border-radius:999px;
+  font-size:11px;padding:6px 12px;cursor:pointer;transition:transform .2s,background .2s;
+}
+.live-refresh:hover{background:#fdf0f4}
+.live-refresh.is-busy{opacity:.6;animation:live-spin .7s linear infinite}
+
+.live-grid{
+  display:grid;grid-template-columns:1.5fr .85fr 1.25fr 1.2fr .9fr;gap:1px;
+  margin:0 0 14px;background:var(--line,#edd8de);border:1px solid var(--line,#edd8de);
+  border-radius:14px;overflow:hidden;
+}
+.live-cell{background:#fffdfb;padding:11px 14px;min-width:0}
+.live-cell dt{font-size:10px;letter-spacing:.6px;color:var(--muted,#967d83);margin-bottom:5px}
+.live-cell dd{margin:0;font-size:13.5px;line-height:1.55;overflow-wrap:anywhere}
+.live-number-cell{display:flex;flex-direction:column;align-items:flex-start;gap:4px;min-width:0}
+.live-number-row{display:flex;align-items:center;gap:6px;flex-wrap:wrap;min-width:0}
+.live-number{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px;letter-spacing:.4px}
+.live-carrier{font-size:10px;letter-spacing:.5px;background:#fdeef4;border:1px solid #f3cfdd;color:#a94568;border-radius:999px;padding:2px 7px;max-width:100%;white-space:normal;overflow-wrap:anywhere}
+.live-copy{
+  border:0;background:none;color:#b48194;font-size:13px;padding:2px 4px;cursor:pointer;border-radius:6px;
+}
+.live-copy:hover{background:#fdeef4;color:#a94568}
+.live-copy:disabled{opacity:.35;cursor:default}
+.live-state{display:inline-block;font-size:11.5px;padding:3px 9px;border-radius:999px;background:#fdeef4;color:#a94568;border:1px solid #f3cfdd}
+.live-state.state-attention{background:#fff3e6;border-color:#f0d5b4;color:#a4622a}
+.live-state.state-delivered{background:#eef7f1;border-color:#cfe6d8;color:#4f7d61}
+.live-state.state-pending{background:#f4f2f3;border-color:#e6dfe2;color:#8b7a80}
+.live-route{font-size:13px;color:#8a6d75}
+.live-scan{font-size:12.5px;color:#8a6d75}
+.live-scan.is-muted{color:var(--muted,#967d83);font-size:12px}
+
+.live-sub{font-size:11px;letter-spacing:1px;color:#b7788a;font-weight:700;margin:16px 0 10px}
+.live-timeline{list-style:none;margin:0;padding:0}
+.live-timeline li{position:relative;padding:0 0 12px 20px;margin-left:6px;border-left:1px dashed var(--line,#edd8de)}
+.live-timeline li:last-child{border-left-color:transparent;padding-bottom:2px}
+.live-timeline li::before{
+  content:'';position:absolute;left:-4.5px;top:4px;width:8px;height:8px;border-radius:50%;
+  background:#fffdfb;border:2px solid #e0b9c7;
+}
+.live-timeline li.is-current::before{background:#e0608a;border-color:#e0608a;box-shadow:0 0 0 4px #fbdbe7}
+.live-timeline li.is-done{border-left-color:#f1dfe5}
+.live-timeline li.is-done::before{background:#f3dbe3;border-color:#f3dbe3;top:5px;width:7px;height:7px;left:-4px}
+.live-timeline li.is-future{opacity:.42}
+.live-timeline li.is-future::before{background:#fffdfb;border-color:#e7dfe1}
+.live-timeline time{font-size:10.5px;color:var(--muted,#967d83);letter-spacing:.3px}
+.live-timeline p{margin:3px 0 0;font-size:13px;line-height:1.6}
+.live-now{font-size:9px;background:#fdeef4;color:#a94568;border-radius:999px;padding:1px 6px;margin-left:6px;vertical-align:1px}
+.live-more{
+  display:block;margin:2px auto 0;border:1px solid var(--line,#edd8de);background:#fff8f6;color:#a26b7c;
+  border-radius:999px;font-size:11px;padding:7px 16px;cursor:pointer;
+}
+.live-more:hover{background:#fdf0f4}
+.live-more[hidden]{display:none}
+.live-source{margin:12px 0 0;text-align:right;font-size:10.5px;color:var(--muted,#967d83);line-height:1.7}
+
+@keyframes live-beat{0%,100%{box-shadow:0 0 0 0 #e0608a55}50%{box-shadow:0 0 0 5px #e0608a00}}
+@keyframes live-spin{to{transform:rotate(360deg)}}
+
+@media(max-width:760px){
+  .live-parcel{padding:18px 15px 13px;border-radius:16px;margin-top:22px}
+  .live-grid{grid-template-columns:1fr 1fr}
+  .live-cell.wide{grid-column:1 / -1}
+  .live-title{font-size:17px}
+  .live-head{gap:8px 10px}
+  .live-source{text-align:left}
+}
+@media(max-width:520px){
+  .live-head{gap:8px}
+  .live-head-main{flex:1 1 100%}
+  .live-head-meta{flex:1 1 100%;justify-content:flex-end;margin-left:0}
+  .live-refresh{padding:6px 9px}
+  .live-refresh-label{display:none}
+}
+@media(prefers-reduced-motion:reduce){
+  .live-live i,.live-refresh.is-busy{animation:none!important}
+}

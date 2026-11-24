@@ -1,0 +1,14 @@
+{
+  "stage": "transit",
+  "state": "in_transit",
+  "updatedAt": "",
+  "checkedAt": "2026-11-23T14:45:00+08:00",
+  "sync": "ok",
+  "carrier": "中国邮政 EMS",
+  "carrierKo": "중국우정 EMS",
+  "number": "EB872529602CN",
+  "origin": { "zh": "上海", "ko": "상하이", "lat": 31.2304, "lng": 121.4737 },
+  "destination": { "zh": "奉化郡", "ko": "봉화군", "lat": 36.8931, "lng": 128.7324 },
+  "eta": "",
+  "events": []
+}
