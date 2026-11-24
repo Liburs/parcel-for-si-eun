@@ -4,11 +4,13 @@
 
 ## 线上地址
 
-发布到 GitHub Pages 后访问：
+已发布到 GitHub Pages：
 
 ```text
-https://<你的用户名>.github.io/<仓库名>/
+https://liburs.github.io/parcel-for-si-eun/
 ```
+
+仓库：<https://github.com/Liburs/parcel-for-si-eun>
 
 ## 目录结构
 
@@ -66,7 +68,11 @@ https://<你的用户名>.github.io/<仓库名>/
 
 ## 发布到 GitHub Pages
 
-1. 在 GitHub 新建一个仓库，把本目录的全部文件（包括 `.nojekyll` 和 `assets/`）推上去。
+这个仓库已经配置好：`main` 分支根目录发布，每次 `git push` 后 1–2 分钟自动更新 <https://liburs.github.io/parcel-for-si-eun/>。
+
+如果以后要另建仓库，步骤是：
+
+1. 新建仓库，把本目录的全部文件（包括 `.nojekyll` 和 `assets/`）推上去。
 2. 仓库 **Settings → Pages → Build and deployment**：Source 选 `Deploy from a branch`，Branch 选 `main`，目录选 `/ (root)`，保存。
 3. 等 1–2 分钟，打开 `https://<你的用户名>.github.io/<仓库名>/`。
 
