@@ -1,0 +1,91 @@
+/* 地图可爱化皮肤：只作用于解锁前的 #real-map，不改动 style.css / adventure.css。
+   配合 map.js 里的 🏠 / 💝 / 📦 图钉与流动虚线使用。 */
+.map-card #real-map{
+  border-radius:16px;
+  background:#e9f3ef;
+  box-shadow:inset 0 0 0 1px #f1d6e1,0 4px 14px #a76c7a14;
+}
+/* 底图调成暖暖的奶油色，和粉色手账风格统一。 */
+#real-map .leaflet-tile-pane{filter:saturate(.72) brightness(1.06) sepia(.16) hue-rotate(-7deg)}
+/* 四边柔光 + 细内描边，像贴在纸上的照片。 */
+#real-map::after{
+  content:'';position:absolute;inset:0;pointer-events:none;z-index:250;border-radius:inherit;
+  box-shadow:inset 0 0 26px #fff7fa,inset 0 0 0 1px #f3d7e1;
+  background:linear-gradient(180deg,#fff8fb1a,transparent 16%,transparent 84%,#fff4f824);
+}
+
+/* ---------- 缩放按钮 ---------- */
+#real-map .leaflet-control-zoom{
+  border:0!important;border-radius:14px;overflow:hidden;margin:12px!important;
+  box-shadow:0 6px 16px #a76c7a2e;
+}
+#real-map .leaflet-control-zoom a{
+  width:31px;height:31px;line-height:31px;background:#fffaf7;color:#b05d7d;
+  border:0;font-weight:600;font-size:16px;
+}
+#real-map .leaflet-control-zoom a:hover{background:#fdeef4;color:#a94568}
+#real-map .leaflet-control-zoom a:first-child{border-bottom:1px solid #f6e3ea}
+
+/* ---------- 版权条 ---------- */
+#real-map .leaflet-control-attribution{
+  background:#fffdfbd9!important;border-radius:999px;padding:1px 8px!important;margin:0 8px 7px 0!important;
+  font-size:9px;color:#a98e96;box-shadow:0 2px 8px #a76c7a14;
+}
+#real-map .leaflet-control-attribution a{color:#b7788a}
+
+/* ---------- 地名小标签 ---------- */
+.map-name.leaflet-tooltip{
+  background:#fffdf9;border:1px dashed #e6c8d4;color:#8c6b76;border-radius:999px;
+  padding:2px 9px;font-size:10px;letter-spacing:.3px;white-space:nowrap;
+  box-shadow:0 3px 10px #a76c7a1f;
+}
+.map-name.leaflet-tooltip::before{display:none}
+
+/* ---------- 起点 / 终点小圆牌 ---------- */
+.map-pin{background:none;border:0}
+.map-pin span{
+  display:flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:50%;
+  background:#fffdf9;border:2px solid #efc9d7;font-size:19px;line-height:1;
+  box-shadow:0 4px 12px #86586c33;
+}
+.map-pin-home span{background:#fffaf4;border-color:#e9c3b0}
+.map-pin-end span{background:#fff3f7;border-color:#eeb3c8}
+
+/* ---------- 包裹图钉会呼吸 ---------- */
+.parcel-pin span{position:relative;z-index:1;animation:parcel-bob 3.4s ease-in-out infinite}
+.parcel-pin .parcel-halo{
+  position:absolute;left:-9px;top:-9px;width:60px;height:60px;border-radius:50%;
+  border:2px solid #eea9c0;pointer-events:none;animation:parcel-ring 2.6s ease-out infinite;
+}
+.parcel-pin .parcel-halo::after{
+  content:'';position:absolute;inset:9px;border-radius:50%;background:#fff6f9a8;
+}
+
+/* ---------- 流动的粉色邮路 ---------- */
+.journey-route{animation:route-flow 1.6s linear infinite;filter:drop-shadow(0 2px 3px #e88ba955)}
+
+/* ---------- 地图角落的小邮票标签 ---------- */
+.map-card .map-tag{
+  background:#fffdf6;border:2px dashed #dcc3ae;border-radius:4px;color:#9a8a72;
+  transform:rotate(-1.2deg);box-shadow:2px 3px 0 #eadbc980;
+}
+.map-card .map-tag span{color:#d98aa8}
+
+/* ---------- 底图加载失败提示 ---------- */
+#map-network{
+  display:block;margin:6px auto 0;padding:6px 12px;max-width:max-content;
+  background:#fff3f7;border:1px dashed #edbccd;border-radius:999px;font-size:11px;color:#a84669;
+}
+#map-network[hidden]{display:none!important}
+
+@keyframes parcel-bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+@keyframes parcel-ring{0%{transform:scale(.72);opacity:.85}70%{opacity:0}100%{transform:scale(1.2);opacity:0}}
+@keyframes route-flow{to{stroke-dashoffset:-22}}
+
+@media(max-width:700px){
+  .map-card #real-map{border-radius:12px}
+  #real-map .leaflet-control-zoom a{width:28px;height:28px;line-height:28px}
+}
+@media(prefers-reduced-motion:reduce){
+  .parcel-pin span,.parcel-pin .parcel-halo,.journey-route{animation:none!important}
+}

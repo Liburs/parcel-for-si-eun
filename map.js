@@ -4,6 +4,7 @@
  const pick=(z,k)=>window.siteLanguage.pick(z,k);
  const origin=[31.2304,121.4737],destination=[36.8931,128.7324];
  const map=L.map('real-map',{scrollWheelZoom:false,minZoom:3,maxZoom:15}).setView([34,125],5);
+ map.attributionControl.setPrefix(false);
  const attribution='&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors';
  const warning=document.querySelector('#map-network');
  // 底图依次尝试：OSM 官方 → OSM.de → CARTO 淡色底图。全部失败时保留路线示意并提示。
@@ -32,18 +33,37 @@
   tileTimer=setTimeout(()=>{if(layer===tileLayer&&!loaded)advance();},9000);
  }
  startTiles();
- const icon=emoji=>L.divIcon({className:'parcel-pin',html:'<span>'+emoji+'</span>',iconSize:[42,42],iconAnchor:[21,21]});
- L.circleMarker(origin,{radius:6,color:'#bc6283',fillOpacity:1}).addTo(map).bindPopup(()=>pick('上海','상하이'));
- L.circleMarker(destination,{radius:6,color:'#bc6283',fillOpacity:1}).addTo(map).bindPopup(()=>pick('奉化郡<br>城市级目的地','봉화군<br>도시 단위 목적지'));
- const route=[];for(let i=0;i<=100;i++){const t=i/100;route.push([origin[0]+(destination[0]-origin[0])*t+2*Math.sin(Math.PI*t),origin[1]+(destination[1]-origin[1])*t]);}
- L.polyline(route,{color:'#d97c9c',weight:3,dashArray:'7 9'}).addTo(map).bindPopup(()=>pick('心意旅程示意线，非实际航线','마음을 잇는 선이며 실제 항로가 아니에요.'));
- const parcel=L.marker(origin,{icon:icon('📦')}).addTo(map);
+
+ // 可爱化：起点 / 终点小圆牌 + 永久地名标签 + 会呼吸的包裹图钉。
+ const pinIcon=(emoji,cls)=>L.divIcon({className:'map-pin '+(cls||''),html:'<span>'+emoji+'</span>',iconSize:[40,40],iconAnchor:[20,20]});
+ const startPin=L.marker(origin,{icon:pinIcon('🏠','map-pin-home'),zIndexOffset:300,keyboard:false}).addTo(map);
+ const endPin=L.marker(destination,{icon:pinIcon('💝','map-pin-end'),zIndexOffset:300,keyboard:false}).addTo(map);
+ const startLabel=()=>pick('上海 · SHANGHAI','상하이 · SHANGHAI');
+ const endLabel=()=>pick('奉化 · BONGHWA','봉화 · BONGHWA');
+ startPin.bindTooltip(startLabel,{permanent:true,direction:'top',offset:[0,-19],className:'map-name',opacity:1});
+ endPin.bindTooltip(endLabel,{permanent:true,direction:'bottom',offset:[0,19],className:'map-name',opacity:1});
+
+ // 一层柔光 + 一层会流动的粉色虚线，像手账上的邮路。
+ const route=[];for(let i=0;i<=120;i++){const t=i/120;route.push([origin[0]+(destination[0]-origin[0])*t+2*Math.sin(Math.PI*t),origin[1]+(destination[1]-origin[1])*t]);}
+ L.polyline(route,{color:'#ffffff',weight:10,opacity:.9,lineCap:'round',lineJoin:'round',interactive:false}).addTo(map);
+ L.polyline(route,{color:'#e88ba9',weight:3,dashArray:'1 10',lineCap:'round',className:'journey-route',interactive:false}).addTo(map);
+
+ const icon=emoji=>L.divIcon({className:'parcel-pin',html:'<span>'+emoji+'</span><i class="parcel-halo"></i>',iconSize:[42,42],iconAnchor:[21,21]});
+ const parcel=L.marker(origin,{icon:icon('📦'),zIndexOffset:900,riseOnHover:true,keyboard:false}).addTo(map);
  let last=origin;
+
+ window.addEventListener('site-language-changed',()=>{
+  startPin.setTooltipContent(startLabel());
+  endPin.setTooltipContent(endLabel());
+ });
+
  function fit(){map.invalidateSize();map.fitBounds([origin,destination],{padding:[45,60],maxZoom:6});}
  document.querySelector('#map-reset').onclick=fit;
+
  // Coordinates are approximate representative points for known broad stages.
  // Unknown domestic locations retain the last point instead of inventing a city.
  const places={shanghai:origin,domestic:[31.6,121.2],transit:[34.4,125.1],korea:[37.45,126.45],delivery:destination,delivered:destination};
+ const stageNames={shanghai:['上海','상하이'],domestic:['中国境内运输','중국 내 운송'],transit:['国际运输中','국제 운송 중'],korea:['已到韩国','한국 도착'],delivery:['前往奉化','봉화로 이동 중'],delivered:['已送达','배송 완료']};
  window.parcelMap={
   tracking(config){
    // 优先用最新一条带坐标的扫描记录，其次 location，最后按阶段取示意位置。
@@ -59,13 +79,18 @@
    const lat=Number(p&&p.lat),lng=Number(p&&p.lng);
    const valid=p&&Number.isFinite(lat)&&Number.isFinite(lng)&&lat>=20&&lat<=55&&lng>=100&&lng<=140;
    last=valid?[lat,lng]:(places[config.stage]||last);
-   parcel.setIcon(icon('📦')).setLatLng(last);
-   parcel.bindPopup(()=>valid?pick('最新扫描城市：','최근 스캔 도시: ')+String(window.siteLanguage.language==='ko'?(p.nameKo||p.name_ko||(!/[\u4e00-\u9fff]/.test(p.name||'')?p.name:'')||'위치 확인됨'):(p.nameZh||p.name||'位置确认')).replace(/[<>&]/g,'')+'<br>'+pick('城市级近似位置，非 GPS','도시 단위의 대략적인 위치이며 GPS가 아니에요'):config.stage==='domestic'||config.stage==='transit'?pick('运输中，具体位置尚不确定','운송 중이며 정확한 위치는 아직 확인되지 않았어요'):pick('包裹阶段示意位置','배송 단계별 대략적인 위치'));
+   parcel.setIcon(icon(config.stage==='delivered'?'💝':'📦')).setLatLng(last);
+   parcel.bindPopup(()=>{
+    const name=valid?String(window.siteLanguage.language==='ko'?(p.nameKo||p.name_ko||(!/[\u4e00-\u9fff]/.test(p.name||'')?p.name:'')||'위치 확인됨'):(p.nameZh||p.name||'位置确认')).replace(/[<>&]/g,''):'';
+    const stage=stageNames[config.stage]?stageNames[config.stage]:stageNames.shanghai;
+    if(valid)return '<strong>'+pick('最新扫描位置','최근 스캔 위치')+'</strong><br>'+name+'<br><small>'+pick('城市级近似位置，非 GPS','도시 단위의 대략적인 위치이며 GPS가 아니에요')+'</small>';
+    return '<strong>'+pick(stage[0],stage[1])+'</strong><br><small>'+(config.stage==='domestic'||config.stage==='transit'?pick('运输中，具体位置尚不确定','운송 중이며 정확한 위치는 아직 확인되지 않았어요'):pick('包裹阶段示意位置','배송 단계별 대략적인 위치'))+'</small>';
+   });
    requestAnimationFrame(()=>map.invalidateSize());
   },
   begin(){parcel.setIcon(icon('✈️'));fit();},
   progress(t){const i=Math.min(100,Math.round(t*100));parcel.setLatLng(route[i]);},
-  finish(){parcel.setLatLng(destination).setIcon(icon('📦'));},
+  finish(){parcel.setLatLng(destination).setIcon(icon('💝'));},
   resize(){requestAnimationFrame(()=>map.invalidateSize());}
  };
  new ResizeObserver(()=>map.invalidateSize()).observe(document.querySelector('#real-map'));

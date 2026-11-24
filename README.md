@@ -18,10 +18,11 @@ https://liburs.github.io/parcel-for-si-eun/
 | --- | --- |
 | `index.html` | 页面骨架，按顺序加载各模块 |
 | `app.js` | 页面流程：物流面板、解锁、礼物、信件（解锁密码也在这里） |
-| `map.js` | 解锁前顶部的真实路线地图（OpenStreetMap 底图，失败自动切换备用源） |
+| `map.js` | 解锁前顶部的真实路线地图（三级底图回退、流动邮路、🏠/💝/📦 图钉） |
+| `parcel-map.css` | 地图的可爱手账皮肤（奶油色底图、圆角柔光、地名小标签） |
 | `tracking.js` | 每 60 秒读取 `tracking.json`，并广播 `tracking-updated` 事件 |
 | `tracking.json` | **物流数据源**（解锁前「物流实况」卡片和地图都读它） |
-| `parcel-live.js` | 解锁前的「物流实况」卡片：承运商 / 单号 / 状态 / 路线 / ETA / 轨迹时间轴 |
+| `parcel-live.js` | 解锁前的「物流实况」卡片：进度条、承运商/单号/服务/清关、重量/尺寸/内件、距离、ETA、轨迹 |
 | `parcel-live.css` | 上面这张卡片的独立样式 |
 | `quest-*.js` `adventure.js` | 四段小游戏（寻宝、受困、灵异等） |
 | `culture.js` | 熊猫 / 三星堆文化介绍 |
@@ -41,10 +42,20 @@ https://liburs.github.io/parcel-for-si-eun/
   "sync": "ok",
   "carrier": "中国邮政 EMS",
   "carrierKo": "중국우정 EMS",
+  "service": "EMS 特快 · 3–7 天",
+  "serviceKo": "EMS 특급 · 3–7일",
   "number": "EB872529602CN",
   "origin": { "zh": "上海", "ko": "상하이", "lat": 31.2304, "lng": 121.4737 },
   "destination": { "zh": "奉化郡", "ko": "봉화군", "lat": 36.8931, "lng": 128.7324 },
   "eta": "2026-11-26",
+  "customs": "pending",
+  "cargo": {
+    "weight": "1.2 kg",
+    "dimensions": "30 × 22 × 12 cm",
+    "contents": [
+      { "zh": "中国饼干 · 坚果 · 魔芋爽", "ko": "중국 과자 · 견과류 · 곤약 간식" }
+    ]
+  },
   "events": [
     {
       "time": "2026-11-22T08:40:00+08:00",
@@ -60,7 +71,12 @@ https://liburs.github.io/parcel-for-si-eun/
 - `state`（卡片上的状态标签）：`pending`、`label_created`、`in_transit`、`awaiting_data`、`attention`（延误/异常）、`location_unknown`、`pickup`、`customs`（清关中）、`delivered`。
 - `updatedAt` 最近一次物流扫描时间；`checkedAt` 数据核对时间（卡片右上角「X 分钟前更新」就按它算，每次改完文件记得更新）；`eta` 预计到达日期（可留空，页面会显示「待确认」）。
 - `carrierKo` 可选，韩文页面显示用的承运商名。
-- `events` 按时间从新到旧写（代码也会自动排序）。每条里的 `city` 可写 `zh` / `ko` / `lat` / `lng`：卡片显示地名，地图会把包裹图标移到最新一条带坐标的扫描城市；没有坐标时按 `stage` 显示大致阶段位置。
+- `service` / `serviceKo` 可选，服务类型（例如「EMS 特快 · 3–7 天」）。
+- `customs` 可选，清关状态：`pending` 待清关 / `preparing` 清关中 / `cleared` 已清关 / `unknown` 待确认。
+- `cargo.weight`、`cargo.dimensions` 可选，重量与尺寸（纯文本，单位两边通用）。
+- `cargo.contents` 可选，内件清单数组，每条写 `{ "zh": "...", "ko": "..." }`，最多显示 4 行。
+- 「直线距离」由 `origin` 与 `destination` 的坐标自动算出来，`eta` 会自动换算成「D-4」这样的倒计时；运单号旁的「查询 ↗」会打开韩国邮政的查询页。
+- `events` 按时间从新到旧写（代码也会自动排序）。每条里的 `city` 可写 `zh` / `ko` / `lat` / `lng`：卡片显示地名，地图会把包裹图标移到最新一条带坐标的扫描城市；没有坐标时按 `stage` 显示大致阶段位置。可选 `kind` 用来换时间轴图标：`picked`、`depart`、`flight`、`arrive`、`customs`、`delivery`、`delivered`。
 - 没有 `events` 时，卡片会展示当前阶段附近的预计节点（可展开全部），不会空白。
 - 可选字段 `location`：`{ "lat": 37.45, "lng": 126.45, "nameZh": "仁川", "nameKo": "인천" }`，在没有扫描记录时手动指定地图上的包裹位置。
 
