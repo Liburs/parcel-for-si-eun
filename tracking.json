@@ -1,11 +1,96 @@
 {
   "number": "EB872529602CN",
   "carrier": "EMS",
-  "stage": "shanghai",
-  "state": "awaiting_data",
-  "sync": "not_configured",
-  "checkedAt": "",
-  "updatedAt": "",
-  "events": [],
+  "source": "Korea Post",
+  "sourceUrl": "https://trace.epost.go.kr/xtts/servlet/kpl.tts.common.svl.SttSVL?POST_CODE=EB872529602CN&target_command=kpl.tts.tt.epost.cmd.RetrieveEmsTraceEngCmd",
+  "stage": "korea",
+  "state": "in_transit",
+  "sync": "ok",
+  "checkedAt": "2026-11-26T09:59:07.551Z",
+  "updatedAt": "2026-11-26T17:53:00+09:00",
+  "events": [
+    {
+      "time": "2026-11-26T17:53:00+09:00",
+      "timeLabel": "17:53 26-Nov-2026",
+      "description": "到达邮件处理中心",
+      "descriptionKo": "우편 처리 시설 도착",
+      "original": "Arrival at Office of Exchange",
+      "location": "Integrated Mail Center",
+      "officeZh": "邮件处理中心",
+      "officeKo": "우편 처리 시설",
+      "country": "KR",
+      "city": null
+    },
+    {
+      "time": "2026-11-26T14:03:00+09:00",
+      "timeLabel": "14:03 26-Nov-2026",
+      "description": "离开进口交换局",
+      "descriptionKo": "도착 교환국 출발",
+      "original": "Departure from inward office of exchange",
+      "location": "INTERNATIONAL POST OFFICE",
+      "officeZh": "国际邮政交换局",
+      "officeKo": "국제우편 교환국",
+      "country": "KR",
+      "city": null
+    },
+    {
+      "time": "2026-11-26T09:08:00+09:00",
+      "timeLabel": "09:08 26-Nov-2026",
+      "description": "到达进口交换局",
+      "descriptionKo": "도착 교환국 도착",
+      "original": "Arrival at inward office of exchange",
+      "location": "INTERNATIONAL POST OFFICE",
+      "officeZh": "国际邮政交换局",
+      "officeKo": "국제우편 교환국",
+      "country": "KR",
+      "city": null
+    },
+    {
+      "time": "2026-11-24T13:02:00+08:00",
+      "timeLabel": "13:02 24-Nov-2026",
+      "description": "准备发往目的地",
+      "descriptionKo": "목적지 발송 준비",
+      "original": "Ready for dispatch",
+      "location": "CNSHAD",
+      "officeZh": "上海出口交换局",
+      "officeKo": "상하이 발송 교환국",
+      "country": "CN",
+      "city": {
+        "zh": "上海",
+        "ko": "상하이",
+        "lat": 31.2304,
+        "lng": 121.4737
+      }
+    },
+    {
+      "time": "2026-11-23T23:23:00+08:00",
+      "timeLabel": "23:23 23-Nov-2026",
+      "description": "到达出口交换局",
+      "descriptionKo": "발송 교환국 도착",
+      "original": "Arrival at outward office of exchange",
+      "location": "CNSHAD",
+      "officeZh": "上海出口交换局",
+      "officeKo": "상하이 발송 교환국",
+      "country": "CN",
+      "city": {
+        "zh": "上海",
+        "ko": "상하이",
+        "lat": 31.2304,
+        "lng": 121.4737
+      }
+    },
+    {
+      "time": "2026-11-22T13:43:00+08:00",
+      "timeLabel": "13:43 22-Nov-2026",
+      "description": "邮政已揽收",
+      "descriptionKo": "우체국 접수",
+      "original": "Posting/Collection",
+      "location": "201306",
+      "officeZh": "201306",
+      "officeKo": "201306",
+      "country": "CN",
+      "city": null
+    }
+  ],
   "location": null
 }

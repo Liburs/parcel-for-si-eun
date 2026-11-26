@@ -1,17 +1,18 @@
-# EMS 自动物流配置
+# EMS 自动查询：无需企业账号
 
-运单：EB872529602CN。原网站：https://liburs.github.io/parcel-for-si-eun/
+运单 EB872529602CN。网站保持 https://liburs.github.io/parcel-for-si-eun/
 
-1. 在 https://api.17track.net/ 注册 **API 账号**，按该服务当前套餐与额度说明启用 API。普通查件账号不一定提供 API 密钥。不要把密钥写进源码或聊天。
-2. GitHub 仓库 Settings → Secrets and variables → Actions → New repository secret。名称填写 `TRACK17_TOKEN`，内容填写 API 密钥。
-3. Settings → Pages → Source 选择 **GitHub Actions**。
-4. Actions → Parcel tracking and Pages → Run workflow。首次运行会尝试注册此运单，可能消耗服务额度；承运商记录准备可能需要几分钟，之后再运行一次检查。
-5. 默认每小时第17、47分钟自动查件并部署，GitHub 调度可能延迟，并非 GPS 实时定位。公开仓库长期无活动时计划任务可能被平台停用。
+当前使用韩国邮政公开的 EMS 查询页面，不需要 17TRACK 账号或密钥。
+GitHub Actions 每小时第17和47分钟查询一次，成功后保存真实扫描记录并发布。
+GitHub 调度可能延迟；页面每分钟读取最新结果。这不是 GPS 实时定位。
 
-缺少密钥时页面显示待接通，不伪造轨迹。查询失败保留上次数据并提示失败。重量、预计到达日期、包裹尺寸未获得可靠来源，因此不显示。地图位置来自扫描城市或承运商坐标；城市中心点是近似位置，连线不是实际运输路线。无法确定位置时不猜测海上坐标。
+Actions → Parcel tracking and Pages → Run workflow 可以立即触发一次后台查询。
+网络失败、页面结构变化或没有识别到轨迹时，保留最后确认记录并提示更新失败。
+只提取日期、处理状态和处理机构，不保存收寄件人姓名或联系方式。
 
-韩文界面有承运商韩文译文时显示译文；否则显示韩文提示，并将承运商原文放在可展开的原文区域。
+地图中的上海点依据 CNSHAD 交换局代码，韩国区域点仅用于已到韩国但城市未知的情况。
+连线为扫描点之间的示意，不代表实际运输路线。没有虚构重量、预计到达日期或尺寸。
+官方时间以扫描地时间显示；中国节点按 UTC+8，韩国节点按 UTC+9 解析。
+原始英文状态可在每条时间轴下展开核对。
 
-当前上线数据尚未通过真实 API 查询验证。完成密钥设置后，应核对网页记录与官方查询结果，再确认自动查询已接通。
-
-API 文档：https://api.17track.net/en/doc
+已移除不再使用的 17TRACK 接口脚本。

@@ -62,7 +62,7 @@
 
  // Coordinates are approximate representative points for known broad stages.
  // Unknown domestic locations retain the last point instead of inventing a city.
- const places={shanghai:origin,domestic:[31.6,121.2],transit:[34.4,125.1],korea:[37.45,126.45],delivery:destination,delivered:destination};
+ const places={shanghai:origin,domestic:[31.6,121.2],transit:[34.4,125.1],korea:[36.5,127.8],delivery:destination,delivered:destination};
  const stageNames={shanghai:['上海','상하이'],domestic:['中国境内运输','중국 내 운송'],transit:['国际运输中','국제 운송 중'],korea:['已到韩国','한국 도착'],delivery:['前往奉化','봉화로 이동 중'],delivered:['已送达','배송 완료']};
  window.parcelMap={
   tracking(config){
@@ -75,16 +75,16 @@
     if(!Number.isFinite(lat)||!Number.isFinite(lng))continue;
     if(!event||(Date.parse(item.time)||0)>(Date.parse(event.time)||0))event={...city,lat,lng,nameZh:city.zh,nameKo:city.ko,time:item.time};
    }
-   const p=event&&(!config.location||Date.parse(event.time)>Date.parse(config.location.time||0))?event:config.location||event;
+   const p=config.source==='Korea Post'?config.location:event&&(!config.location||Date.parse(event.time)>Date.parse(config.location.time||0))?event:config.location||event;
    const lat=Number(p&&p.lat),lng=Number(p&&p.lng);
    const valid=p&&Number.isFinite(lat)&&Number.isFinite(lng)&&lat>=20&&lat<=55&&lng>=100&&lng<=140;
    last=valid?[lat,lng]:(places[config.stage]||last);
-   parcel.setOpacity(valid?1:.35);parcel.setIcon(icon(config.stage==='delivered'?'💝':'📦'));if(valid)movePin(last);const points=events.filter(e=>e.city&&Number.isFinite(e.city.lat)&&Number.isFinite(e.city.lng)).slice().reverse().map(e=>[e.city.lat,e.city.lng]);scanPath.setLatLngs(points);
+   parcel.setOpacity(valid?1:.35);parcel.setIcon(icon(config.stage==='delivered'?'💝':'📦'));if(valid||config.stage==='korea')movePin(last);const points=events.filter(e=>e.city&&Number.isFinite(e.city.lat)&&Number.isFinite(e.city.lng)).slice().reverse().map(e=>[e.city.lat,e.city.lng]);scanPath.setLatLngs(points);
    parcel.bindPopup(()=>{
     const name=valid?String(window.siteLanguage.language==='ko'?(p.nameKo||p.name_ko||(!/[\u4e00-\u9fff]/.test(p.name||'')?p.name:'')||'위치 확인됨'):(p.nameZh||p.name||'位置确认')).replace(/[<>&]/g,''):'';
     const stage=stageNames[config.stage]?stageNames[config.stage]:stageNames.shanghai;
     if(valid)return '<strong>'+pick('最新扫描位置','최근 스캔 위치')+'</strong><br>'+name+'<br><small>'+pick('城市级近似位置，非 GPS','도시 단위의 대략적인 위치이며 GPS가 아니에요')+'</small>';
-    return '<strong>'+pick('尚无可定位的扫描记录','위치를 확인할 스캔 기록이 없어요')+'</strong><br><small>'+(config.stage==='domestic'||config.stage==='transit'?pick('运输中，具体位置尚不确定','운송 중이며 정확한 위치는 아직 확인되지 않았어요'):pick('包裹阶段示意位置','배송 단계별 대략적인 위치'))+'</small>';
+    return '<strong>'+pick('具体城市尚未确认 · 区域示意','정확한 도시는 미확인 · 지역 표시')+'</strong><br><small>'+(config.stage==='domestic'||config.stage==='transit'?pick('运输中，具体位置尚不确定','운송 중이며 정확한 위치는 아직 확인되지 않았어요'):pick('包裹阶段示意位置','배송 단계별 대략적인 위치'))+'</small>';
    });
    requestAnimationFrame(()=>map.invalidateSize());
   },

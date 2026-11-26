@@ -24,9 +24,7 @@ jobs:
         with:
           node-version: '22'
       - name: Read carrier tracking
-        env:
-          TRACK17_TOKEN: ${{ secrets.TRACK17_TOKEN }}
-        run: node scripts/sync-tracking.mjs
+        run: node scripts/official-tracking.mjs
       - name: Save last verified result
         run: |
           if ! git diff --quiet -- tracking.json; then
