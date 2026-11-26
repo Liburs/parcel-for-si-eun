@@ -1,0 +1,27 @@
+Jett challenge - asset provenance
+
+VALORANT maps, agent, weapons, animation and ability artwork belong to Riot Games.
+This is an unofficial, non-commercial fan practice module, not a Riot product.
+Riot fan content policy: https://www.riotgames.com/en/legal
+
+Maps: Ascent, Abyss, Icebox. Community Blender ports by Cracker646/shade.
+https://www.reddit.com/r/VALORANT/comments/1uueh6s/most_of_the_maps_ported_for_use_in_blender/
+https://drive.google.com/drive/u/0/folders/1henHDT5PX5HW3PRAJ018UBMTgL0F3-2a
+Packed Blender sources converted with auto-execution disabled. Playable regions
+retain original geometry, UVs and textures. Lighting and navigation are adapted.
+
+Jett arms, Sheriff, Vandal, Operator, animations and character model:
+https://kingdomarchives.com/modelviewer/jett-fp?held=sheriff
+https://kingdomarchives.com/modelviewer/sheriff
+https://kingdomarchives.com/modelviewer/vandal
+https://kingdomarchives.com/modelviewer/operator
+https://kingdomarchives.com/modelviewer/jett
+Manifest paths cross-checked with https://github.com/AnMaLeNo/AimLabs .
+No third-party game application code is included.
+
+Ability icons: Riot artwork through https://valorant-api.com/
+Clips/poster: user-supplied compilation by 魔莉达斯.
+https://www.bilibili.com/video/BV1hTAaeuEM2/
+Encouragement captions are original text, not quotations from t3xture.
+Chinese/Korean narration is generated, not a cloned player voice.
+Three.js 0.180.0 MIT license: ../vendor/THREE-LICENSE.txt
