@@ -4,16 +4,19 @@ import { clone } from './assets/vendor/SkeletonUtils.js';
 
 export async function createOpponents(count) {
   const base='assets/jett/ka/', meta=await (await fetch(base+'manifest.json')).json(), spec=meta.agents.jett;
-  const data=await new GLTFLoader().loadAsync(base+spec.glb), materials=new Map(), textures=[];
+  const [data,weaponData]=await Promise.all([new GLTFLoader().loadAsync(base+spec.glb),new GLTFLoader().loadAsync(base+meta.weapons.vandal.glb)]), materials=new Map(), textures=[];
   const tl=new T.TextureLoader();
-  for(const m of spec.materials){
+  for(const m of [...spec.materials,...meta.weapons.vandal.materials]){
     const load=async(path,color=false)=>{if(!path)return null;const t=await tl.loadAsync(base+path);t.flipY=false;if(color)t.colorSpace=T.SRGBColorSpace;textures.push(t);return t;};
     const [map,normalMap,orm]=await Promise.all([load(m.DF,true),load(m.NM),load(m.ORM)]);
     materials.set(m.name,new T.MeshStandardMaterial({map,normalMap,roughnessMap:orm,roughness:1,metalnessMap:orm,metalness:.15,side:T.DoubleSide}));
   }
-  data.scene.traverse(o=>{if(o.isMesh){o.frustumCulled=false;const replace=m=>{const n=materials.get(m.name);if(n){m.dispose();return n;}return m;};o.material=Array.isArray(o.material)?o.material.map(replace):replace(o.material);}});
-  const rigs=Array.from({length:count},()=>{const model=clone(data.scene),g=new T.Group();g.add(model);const mixer=new T.AnimationMixer(model);if(data.animations.length)mixer.clipAction(data.animations.find(c=>/Idle_Loop/.test(c.name))||data.animations[0]).play();mixer.update(.01);model.updateMatrixWorld(true);const bounds=new T.Box3().setFromObject(model);const scale=1.8/(bounds.max.y-bounds.min.y);model.scale.setScalar(scale);model.position.y=-bounds.min.y*scale;return{g,mixer};});
-  return{rigs,dispose(){rigs.forEach(r=>r.mixer.stopAllAction());const gs=new Set();data.scene.traverse(o=>{if(o.geometry)gs.add(o.geometry);});gs.forEach(g=>g.dispose());materials.forEach(m=>m.dispose());textures.forEach(t=>t.dispose());}};
+  [data.scene,weaponData.scene].forEach(root=>root.traverse(o=>{if(o.isMesh){o.frustumCulled=false;const replace=m=>{const n=materials.get(m.name);if(n){m.dispose();return n;}return m;};o.material=Array.isArray(o.material)?o.material.map(replace):replace(o.material);}}));
+  const rigs=Array.from({length:count},()=>{const model=clone(data.scene),g=new T.Group();g.add(model);const mixer=new T.AnimationMixer(model);if(data.animations.length)mixer.clipAction(data.animations.find(c=>/Idle_Loop/.test(c.name))||data.animations[0]).play();mixer.update(.01);model.updateMatrixWorld(true);const bounds=new T.Box3().setFromObject(model);const scale=1.8/(bounds.max.y-bounds.min.y);model.scale.setScalar(scale);model.position.y=-bounds.min.y*scale;
+    const weapon=clone(weaponData.scene),holder=new T.Group();holder.add(weapon);g.add(holder);weapon.rotation.y=-Math.PI/2;weapon.updateMatrixWorld(true);const wb=new T.Box3().setFromObject(weapon),ws=wb.getSize(new T.Vector3()),wc=wb.getCenter(new T.Vector3()),factor=.88/Math.max(ws.x,ws.y,ws.z);weapon.scale.setScalar(factor);weapon.position.copy(wc).multiplyScalar(-factor);holder.position.set(.12,1.31,.43);
+    const aimArm=(side,point)=>{const hand=model.getObjectByName(side+'_Hand'),chain=[model.getObjectByName(side+'_Elbow'),model.getObjectByName(side+'_Shoulder')];if(!hand||chain.some(x=>!x))return;const target=g.localToWorld(point.clone());for(let pass=0;pass<5;pass++)for(const bone of chain){g.updateMatrixWorld(true);const origin=bone.getWorldPosition(new T.Vector3()),current=hand.getWorldPosition(new T.Vector3()).sub(origin).normalize(),desired=target.clone().sub(origin).normalize(),q=new T.Quaternion().setFromUnitVectors(current,desired),parent=bone.parent.getWorldQuaternion(new T.Quaternion());bone.quaternion.premultiply(parent.clone().invert().multiply(q).multiply(parent));}};
+    return{g,mixer,aim(){aimArm('R',new T.Vector3(.2,1.29,.25));aimArm('L',new T.Vector3(.02,1.3,.64));}};});
+  return{rigs,dispose(){rigs.forEach(r=>r.mixer.stopAllAction());const gs=new Set();[data.scene,weaponData.scene].forEach(root=>root.traverse(o=>{if(o.geometry)gs.add(o.geometry);}));gs.forEach(g=>g.dispose());materials.forEach(m=>m.dispose());textures.forEach(t=>t.dispose());}};
 }
 
 // Original Jett arms and weapon rigs, with separate hand/gun animation clips.
@@ -88,7 +91,7 @@ export function createViewmodel(index) {
   }
   const ready = (async () => {
     const response = await fetch(base + 'manifest.json'); if (!response.ok) throw Error('Missing weapon manifest');
-    const meta = await response.json(), agent = meta.agents_fp['jett-fp'];
+    const meta = await response.json(), agent = meta.agents_fp[index===1?'raze-fp':'jett-fp'];
     const weapon = meta.weapons[['sheriff', 'vandal', 'operator'][index]].fp;
     const armsPath = weapon.fp_animations.find(a => a.glb).glb;
     const gunPath = weapon.animations.find(a => a.glb).glb;

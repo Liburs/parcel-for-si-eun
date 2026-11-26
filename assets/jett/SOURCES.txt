@@ -25,3 +25,9 @@ https://www.bilibili.com/video/BV1hTAaeuEM2/
 Encouragement captions are original text, not quotations from t3xture.
 Chinese/Korean narration is generated, not a cloned player voice.
 Three.js 0.180.0 MIT license: ../vendor/THREE-LICENSE.txt
+
+Split map; Raze arms and Paint Shell asset:
+https://kingdomarchives.com/modelviewer/raze-fp?held=vandal
+https://kingdomarchives.com/modelviewer/raze-fp?held=paintshell
+Split clip: source 00:18–00:30.6 (2024 Pacific, RRQ vs GEN).
+Gun effects in jett-audio.js are original synthesized effects, not extracted Riot audio.
