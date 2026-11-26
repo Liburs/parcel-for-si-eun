@@ -1,0 +1,48 @@
+name: Parcel tracking and Pages
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+  schedule:
+    - cron: '17,47 * * * *'
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+concurrency:
+  group: parcel-pages
+  cancel-in-progress: false
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Read carrier tracking
+        env:
+          TRACK17_TOKEN: ${{ secrets.TRACK17_TOKEN }}
+        run: node scripts/sync-tracking.mjs
+      - name: Save last verified result
+        run: |
+          if ! git diff --quiet -- tracking.json; then
+            git config user.name 'github-actions[bot]'
+            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git add tracking.json
+            git commit -m 'Update verified parcel tracking [skip ci]'
+            git push
+          fi
+      - name: Prepare static site
+        run: |
+          mkdir _site
+          rsync -a --exclude='.git' --exclude='.github' --exclude='scripts' --exclude='_site' ./ _site/
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+      - uses: actions/deploy-pages@v4
+        id: deployment

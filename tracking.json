@@ -1,26 +1,11 @@
 {
-  "stage": "transit",
-  "state": "in_transit",
-  "updatedAt": "",
-  "checkedAt": "2026-11-24T20:30:00+08:00",
-  "sync": "ok",
-  "carrier": "中国邮政 EMS",
-  "carrierKo": "중국우정 EMS",
-  "service": "EMS 特快 · 3–7 天",
-  "serviceKo": "EMS 특급 · 3–7일",
   "number": "EB872529602CN",
-  "origin": { "zh": "上海", "ko": "상하이", "lat": 31.2304, "lng": 121.4737 },
-  "destination": { "zh": "奉化郡", "ko": "봉화군", "lat": 36.8931, "lng": 128.7324 },
-  "eta": "2026-11-28",
-  "customs": "pending",
-  "cargo": {
-    "weight": "1.2 kg",
-    "dimensions": "30 × 22 × 12 cm",
-    "contents": [
-      { "zh": "中国饼干 · 坚果 · 魔芋爽", "ko": "중국 과자 · 견과류 · 곤약 간식" },
-      { "zh": "花花熊猫挂件 · 檀木梳", "ko": "화화 판다 키링 · 나무 빗" },
-      { "zh": "三星堆冰箱贴 · 眼睛眼罩", "ko": "싼싱두이 자석 · 수면 안대" }
-    ]
-  },
-  "events": []
+  "carrier": "EMS",
+  "stage": "shanghai",
+  "state": "awaiting_data",
+  "sync": "not_configured",
+  "checkedAt": "",
+  "updatedAt": "",
+  "events": [],
+  "location": null
 }

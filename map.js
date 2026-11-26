@@ -50,7 +50,7 @@
 
  const icon=emoji=>L.divIcon({className:'parcel-pin',html:'<span>'+emoji+'</span><i class="parcel-halo"></i>',iconSize:[42,42],iconAnchor:[21,21]});
  const parcel=L.marker(origin,{icon:icon('📦'),zIndexOffset:900,riseOnHover:true,keyboard:false}).addTo(map);
- let last=origin;
+ let last=origin,animation=0;const scanPath=L.polyline([],{color:'#b75a7d',weight:4,opacity:.85}).addTo(map);function movePin(next){cancelAnimationFrame(animation);const from=parcel.getLatLng(),start=performance.now();if(matchMedia('(prefers-reduced-motion: reduce)').matches){parcel.setLatLng(next);return;}function step(now){const f=Math.min(1,(now-start)/1100),ease=f*f*(3-2*f);parcel.setLatLng([from.lat+(next[0]-from.lat)*ease,from.lng+(next[1]-from.lng)*ease]);if(f<1)animation=requestAnimationFrame(step);}animation=requestAnimationFrame(step);}
 
  window.addEventListener('site-language-changed',()=>{
   startPin.setTooltipContent(startLabel());
@@ -75,21 +75,21 @@
     if(!Number.isFinite(lat)||!Number.isFinite(lng))continue;
     if(!event||(Date.parse(item.time)||0)>(Date.parse(event.time)||0))event={...city,lat,lng,nameZh:city.zh,nameKo:city.ko,time:item.time};
    }
-   const p=config.location||event;
+   const p=event&&(!config.location||Date.parse(event.time)>Date.parse(config.location.time||0))?event:config.location||event;
    const lat=Number(p&&p.lat),lng=Number(p&&p.lng);
    const valid=p&&Number.isFinite(lat)&&Number.isFinite(lng)&&lat>=20&&lat<=55&&lng>=100&&lng<=140;
    last=valid?[lat,lng]:(places[config.stage]||last);
-   parcel.setIcon(icon(config.stage==='delivered'?'💝':'📦')).setLatLng(last);
+   parcel.setOpacity(valid?1:.35);parcel.setIcon(icon(config.stage==='delivered'?'💝':'📦'));if(valid)movePin(last);const points=events.filter(e=>e.city&&Number.isFinite(e.city.lat)&&Number.isFinite(e.city.lng)).slice().reverse().map(e=>[e.city.lat,e.city.lng]);scanPath.setLatLngs(points);
    parcel.bindPopup(()=>{
     const name=valid?String(window.siteLanguage.language==='ko'?(p.nameKo||p.name_ko||(!/[\u4e00-\u9fff]/.test(p.name||'')?p.name:'')||'위치 확인됨'):(p.nameZh||p.name||'位置确认')).replace(/[<>&]/g,''):'';
     const stage=stageNames[config.stage]?stageNames[config.stage]:stageNames.shanghai;
     if(valid)return '<strong>'+pick('最新扫描位置','최근 스캔 위치')+'</strong><br>'+name+'<br><small>'+pick('城市级近似位置，非 GPS','도시 단위의 대략적인 위치이며 GPS가 아니에요')+'</small>';
-    return '<strong>'+pick(stage[0],stage[1])+'</strong><br><small>'+(config.stage==='domestic'||config.stage==='transit'?pick('运输中，具体位置尚不确定','운송 중이며 정확한 위치는 아직 확인되지 않았어요'):pick('包裹阶段示意位置','배송 단계별 대략적인 위치'))+'</small>';
+    return '<strong>'+pick('尚无可定位的扫描记录','위치를 확인할 스캔 기록이 없어요')+'</strong><br><small>'+(config.stage==='domestic'||config.stage==='transit'?pick('运输中，具体位置尚不确定','운송 중이며 정확한 위치는 아직 확인되지 않았어요'):pick('包裹阶段示意位置','배송 단계별 대략적인 위치'))+'</small>';
    });
    requestAnimationFrame(()=>map.invalidateSize());
   },
-  begin(){parcel.setIcon(icon('✈️'));fit();},
-  progress(t){const i=Math.min(100,Math.round(t*100));parcel.setLatLng(route[i]);},
+  begin(){cancelAnimationFrame(animation);parcel.setOpacity(1);parcel.setIcon(icon('✈️'));fit();},
+  progress(t){const i=Math.min(120,Math.round(t*120));parcel.setLatLng(route[i]);},
   finish(){parcel.setLatLng(destination).setIcon(icon('💝'));},
   resize(){requestAnimationFrame(()=>map.invalidateSize());}
  };
