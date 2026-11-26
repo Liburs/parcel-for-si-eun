@@ -6,9 +6,33 @@
   "stage": "korea",
   "state": "in_transit",
   "sync": "ok",
-  "checkedAt": "2026-11-26T13:03:03.959Z",
-  "updatedAt": "2026-11-26T17:53:00+09:00",
+  "checkedAt": "2026-11-26T19:42:34.573Z",
+  "updatedAt": "2026-11-27T00:38:00+09:00",
   "events": [
+    {
+      "time": "2026-11-27T00:38:00+09:00",
+      "timeLabel": "00:38 27-Nov-2026",
+      "description": "到达邮件处理中心",
+      "descriptionKo": "우편 처리 시설 도착",
+      "original": "Arrival at Office of Exchange",
+      "location": "Andong Mail Center",
+      "officeZh": "Andong Mail Center",
+      "officeKo": "Andong Mail Center",
+      "country": "KR",
+      "city": null
+    },
+    {
+      "time": "2026-11-26T22:30:00+09:00",
+      "timeLabel": "22:30 26-Nov-2026",
+      "description": "离开进口交换局",
+      "descriptionKo": "도착 교환국 출발",
+      "original": "Departure from inward office of exchange",
+      "location": "Integrated Mail Center",
+      "officeZh": "邮件处理中心",
+      "officeKo": "우편 처리 시설",
+      "country": "KR",
+      "city": null
+    },
     {
       "time": "2026-11-26T17:53:00+09:00",
       "timeLabel": "17:53 26-Nov-2026",
