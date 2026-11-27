@@ -3,12 +3,24 @@
   "carrier": "EMS",
   "source": "Korea Post",
   "sourceUrl": "https://trace.epost.go.kr/xtts/servlet/kpl.tts.common.svl.SttSVL?POST_CODE=EB872529602CN&target_command=kpl.tts.tt.epost.cmd.RetrieveEmsTraceEngCmd",
-  "stage": "korea",
-  "state": "in_transit",
+  "stage": "delivered",
+  "state": "delivered",
   "sync": "ok",
-  "checkedAt": "2026-11-27T02:26:37.839Z",
-  "updatedAt": "2026-11-27T09:09:00+09:00",
+  "checkedAt": "2026-11-27T08:37:37.361Z",
+  "updatedAt": "2026-11-27T11:58:00+09:00",
   "events": [
+    {
+      "time": "2026-11-27T11:58:00+09:00",
+      "timeLabel": "11:58 27-Nov-2026",
+      "description": "已妥投",
+      "descriptionKo": "배달 완료",
+      "original": "Delivery complete",
+      "location": "BONGHWA",
+      "officeZh": "BONGHWA",
+      "officeKo": "BONGHWA",
+      "country": "KR",
+      "city": null
+    },
     {
       "time": "2026-11-27T09:09:00+09:00",
       "timeLabel": "09:09 27-Nov-2026",
