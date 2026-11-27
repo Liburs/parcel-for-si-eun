@@ -255,10 +255,10 @@ function openCulture(kind,focus){
  d.innerHTML='<div class="letter-toolbar"><span>四川小旅行 · 쓰촨으로 떠나는 작은 여행</span><button class="close" aria-label="关闭文化介绍">×</button></div><div class="culture-body"></div>';
  document.body.append(d);d.querySelector('.close').onclick=()=>d.close();
  function render(){const indices=[cultureLanguage==='zh'?0:1];const root=d.querySelector('.culture-body');root.replaceChildren();function textPair(parent,tag,texts){indices.forEach(i=>{const el=document.createElement(tag);el.lang=i===0?'zh-CN':'ko';el.textContent=texts[i];parent.append(el);});}
- textPair(root,'h1',book.title);textPair(root,'p',book.subtitle);
+ textPair(root,'h1',book.title);textPair(root,'p',book.subtitle);const overview=document.createElement('p');overview.className='culture-overview';overview.textContent=window.siteLanguage.pick(book.chapters.length+' 个章节 · 图文慢读 · 点击图片查看大图',book.chapters.length+'개 장 · 사진과 함께 읽기 · 사진을 눌러 확대');root.append(overview);
  const nav=document.createElement('nav');nav.className='culture-toc';nav.setAttribute('aria-label','章节目录 / 목차');book.chapters.forEach((c,i)=>{const a=document.createElement('button');a.textContent=c.title[indices[0]];a.onclick=()=>root.querySelector('#chapter-'+i).scrollIntoView({behavior:'smooth',block:'start'});nav.append(a);});root.append(nav);
- book.chapters.forEach((c,i)=>{const section=document.createElement('section');section.id='chapter-'+i;textPair(section,'h2',c.title);textPair(section,'p',[c.zh,c.ko]);if(c.image){const fig=document.createElement('figure');const link=document.createElement('a');link.href='assets/culture/'+c.image;link.target='_blank';link.rel='noopener';const img=document.createElement('img');img.src=link.href;img.alt=c.caption[indices[0]];img.loading='lazy';link.append(img);fig.append(link);textPair(fig,'figcaption',c.caption);section.append(fig);}if(c.compare){const f=document.createElement('figure');const img=document.createElement('img');img.src='assets/'+c.compare;img.alt='你的文创礼物 / 누나의 기념품';img.loading='lazy';f.append(img);textPair(f,'figcaption',['对照看看：你收到的文创礼物','비교해 봐요: 누나가 받은 기념품']);section.append(f);}const sources=document.createElement('div');sources.className='culture-sources';c.sources.forEach(key=>{const a=document.createElement('a');a.href=CULTURE_SOURCES[key][1];a.textContent='↗ '+window.siteLanguage.pick(CULTURE_SOURCES[key][0],CULTURE_SOURCE_KO[key]);a.target='_blank';a.rel='noopener';sources.append(a);});section.append(sources);root.append(section);});
- textPair(root,'p',['资料整理于2026年11月19日。图片来源见各图说明与章节链接，版权归原作者或机构；导览和开放安排请以官网最新信息为准。','2026년 11월 19일 자료 정리. 사진 출처는 설명과 링크에 표시했으며 권리는 원저작자·기관에 있어요. 최신 관람 안내는 공식 홈페이지를 확인해 주세요.']);}
+ book.chapters.forEach((c,i)=>{const section=document.createElement('section');section.id='chapter-'+i;textPair(section,'h2',c.title);for(const paragraph of (indices[0]===0?c.zh:c.ko).split('\n')){const p=document.createElement('p');p.textContent=paragraph;section.append(p);}if(c.diagram){const chart=document.createElement('figure');chart.className='culture-diagram';const caption=document.createElement('figcaption');caption.textContent=c.diagram.title[indices[0]];chart.append(caption);const steps=document.createElement('div');steps.className='culture-diagram-grid';c.diagram.items.forEach((item,n)=>{const card=document.createElement('div');const num=document.createElement('span');num.textContent=String(n+1).padStart(2,'0');const title=document.createElement('strong');title.textContent=item[indices[0]];const detail=document.createElement('small');detail.textContent=item[indices[0]+2];card.append(num,title,detail);steps.append(card);});chart.append(steps);section.append(chart);}if(c.image){const fig=document.createElement('figure');const link=document.createElement('a');link.href='assets/culture/'+c.image;link.target='_blank';link.rel='noopener';const img=document.createElement('img');img.src=link.href;img.alt=c.caption[indices[0]];img.loading='lazy';link.append(img);fig.append(link);textPair(fig,'figcaption',c.caption);section.append(fig);}if(c.compare){const f=document.createElement('figure');const img=document.createElement('img');img.src='assets/'+c.compare;img.alt='你的文创礼物 / 누나의 기념품';img.loading='lazy';f.append(img);textPair(f,'figcaption',['对照看看：你收到的文创礼物','비교해 봐요: 누나가 받은 기념품']);section.append(f);}const sources=document.createElement('div');sources.className='culture-sources';c.sources.forEach(key=>{const a=document.createElement('a');a.href=CULTURE_SOURCES[key][1];a.textContent='↗ '+window.siteLanguage.pick(CULTURE_SOURCES[key][0],CULTURE_SOURCE_KO[key]);a.target='_blank';a.rel='noopener';sources.append(a);});section.append(sources);root.append(section);});
+ textPair(root,'p',['资料整理于2026年11月27日。图片来源见各图说明与章节链接，版权归原作者或机构；导览和开放安排请以官网最新信息为准。','2026년 11월 27일 자료 정리. 사진 출처는 설명과 링크에 표시했으며 권리는 원저작자·기관에 있어요. 최신 관람 안내는 공식 홈페이지를 확인해 주세요.']);}
  render();d.showModal();const change=()=>{cultureLanguage=window.siteLanguage.language;render();};window.addEventListener('site-language-changed',change);d.addEventListener('close',()=>window.removeEventListener('site-language-changed',change),{once:true});
 }
 function attachCulture(g){const kind=g.img==='panda.jpg'?'panda':['magnet.jpg','mask.jpg'].includes(g.img)?'sanxingdui':null;if(!kind)return;const area=document.createElement('div');area.className='culture-invite';const heading=document.createElement('h3');heading.textContent=kind==='panda'?'🐼 认识花花与她的家 · 화화와 판다기지':'✦ 认识礼物背后的三星堆 · 선물 속 싼싱두이';const p=document.createElement('p');p.textContent=kind==='panda'?'基地历史、保护故事、花花与官方地图。 / 기지의 역사, 보호 이야기, 화화와 공식 지도.':'遗址发现、古蜀故事与两件青铜文物实照。 / 유적 발견, 고대 촉 이야기와 청동 유물 사진.';const b=document.createElement('button');b.className='primary';b.textContent='展开文化小册 · 이야기 펼치기 ↗';b.onclick=()=>openCulture(kind);area.append(heading,p,b);document.querySelector('#gift-detail').append(area);}
@@ -268,3 +268,390 @@ const CULTURE_SOURCE_KO={base:'청두 판다기지 · 소개',intro:'청두 판�
 
 Object.assign(CULTURE_SOURCES,{"flower":["成都大熊猫繁育研究基金会 · 和花","https://www.pandafoundation.cn/star/22/101/001/2023-04-19/1137.html"],"biology":["国家林草局 · 认识大熊猫","https://www.forestry.gov.cn/c/www/dzw/506528.jhtml"],"feeding":["成都熊猫基地 · 饲养与丰容","https://www.panda.org.cn/cn/animal/feeding/"],"ecosystem":["国家林草局 · 竹林隐士与生态系统","https://www.forestry.gov.cn/c/www/lcdt/636698.jhtml"],"education":["成都熊猫基地 · 保护教育","https://www.panda.org.cn/cn/education/"],"hkpm":["香港故宫 · 凝视三星堆导赏","https://www.hkpm.org.hk/sc/visit/audio-guide/g8-gazing-at-sanxingdui"],"hkpmResource":["香港故宫 · 三星堆学习资源","https://www.hkpm.org.hk/files/learning-resources/教師資源手冊_8_凝視三星堆——四川考古新發現-1761210301.pdf"],"association":["中国博物馆协会 · 古蜀祭祀展览","https://www.chinamuseum.org.cn/detail.html?contentId=12378&id=14"],"casting":["四川省文物考古研究院 · 四川文物2023年第5期","https://www.sckg.com/uploads/soft/20231109/2-2311091IS2Z7.pdf"],"combTerm":["故宫博物院 · 篦","https://www.dpm.org.cn/lemmas/243099.html"],"combHistory":["故宫博物院 · 清宫梳具","https://www.dpm.org.cn/Uploads/pdf/4985/T00116_00.pdf"]});
 Object.assign(CULTURE_SOURCE_KO,{"flower":"청두 판다 번식 연구기금회 · 허화","biology":"중국 국가임업초원국 · 판다 알아보기","feeding":"청두 판다기지 · 사육과 환경 풍부화","ecosystem":"중국 국가임업초원국 · 판다와 생태계","education":"청두 판다기지 · 보호 교육","hkpm":"홍콩고궁 · 싼싱두이 전시 해설","hkpmResource":"홍콩고궁 · 싼싱두이 학습 자료","association":"중국박물관협회 · 고대 촉 의례 전시","casting":"쓰촨성 문물고고연구원 · 쓰촨문물 2023년 제5호","combTerm":"고궁박물원 · 참빗","combHistory":"고궁박물원 · 청대 궁중 빗"});
+
+// Final reading extension: original bilingual observations and referenced facts.
+const CULTURE_FINAL={
+  "panda": [
+    {
+      "title": [
+        "14 · 图解：一座基地的四种角色",
+        "14 · 그림으로 보는 연구기지의 네 역할"
+      ],
+      "zh": "如果只把熊猫基地看成“看熊猫的公园”，就会错过它最重要的一半。基地官方把迁地保护、科研繁育、科普教育和文化旅游并列介绍：照护动物是日常工作，研究让经验变成可讨论的方法，教育帮助公众理解保护，参观则让这些工作被更多人看见。\n这四件事并不是四个彼此独立的房间。饲养中的观察可能成为研究问题，研究结果又会改变照护方式；讲解员再把复杂的知识解释给游客。看似安静的一片竹林，其实连接着许多人的工作。\n下图是一张阅读关系图，不是园区平面图。真正参观时，仍应使用前面的官方地图。先理解这四种角色，再看展区里的食物、活动设施和科普牌，就能把“可爱”看得更有层次。",
+      "ko": "판다기지를 판다를 구경하는 공원으로만 보면 중요한 절반을 놓치게 돼요. 공식 소개는 서식지 외 보전, 번식 연구, 보호 교육, 문화 관광을 함께 설명해요. 동물을 돌보고, 관찰을 연구로 발전시키고, 그 의미를 사람들에게 전하는 장소예요.\n이 역할들은 서로 이어져 있어요. 사육 중 발견한 행동이 연구 질문이 되고, 연구 결과가 돌봄을 바꿀 수 있어요. 해설사는 그 과정을 관람객이 이해하기 쉬운 말로 풀어 주지요. 조용한 대나무 숲 뒤에는 여러 사람의 일이 연결되어 있어요.\n아래 그림은 역할의 관계를 정리한 것이며 실제 관람 지도는 아니에요. 이 네 역할을 떠올리며 먹이와 활동 시설, 안내판을 보면 귀여움 너머의 이야기가 보일 거예요.",
+      "sources": [
+        "base"
+      ],
+      "diagram": {
+        "title": [
+          "可爱背后的工作",
+          "귀여움 뒤의 일"
+        ],
+        "items": [
+          [
+            "照护",
+            "돌봄",
+            "看见每只动物的需求",
+            "개체마다 다른 필요 살피기"
+          ],
+          [
+            "研究",
+            "연구",
+            "把观察变成问题",
+            "관찰에서 질문 찾기"
+          ],
+          [
+            "教育",
+            "교육",
+            "把知识分享出去",
+            "보호 지식 나누기"
+          ],
+          [
+            "参观",
+            "관람",
+            "理解与尊重生命",
+            "생명 이해하고 존중하기"
+          ]
+        ]
+      }
+    },
+    {
+      "title": [
+        "15 · 看花花：把短视频变成观察笔记",
+        "15 · 화화 보기: 짧은 영상에서 관찰 기록으로"
+      ],
+      "zh": "看完花花的视频，可以试着把“她好可爱”拆成几个更具体的发现：身体如何坐稳，前掌怎样抓住食物，耳朵和头部如何转动，休息时重心放在哪里。先描述自己看见的动作，再说它带给你的感受，是很温柔也很严谨的观看方式。\n同一个动作不必急着解释成人的情绪。例如，停下来并不自动等于“伤心”，慢慢吃也不能直接说明“懒”。一段经过剪辑的视频缺少完整情境，健康状态更需要照护人员结合长期记录判断。\n你可以给自己留三行小笔记：“我看到了什么”“我还不知道什么”“下次想继续观察什么”。这张挂件也能成为提醒：喜欢一个生命，不只是给它起可爱的昵称，也包括允许它按自己的节奏生活。",
+      "ko": "화화 영상을 본 뒤 “귀엽다”를 조금 더 구체적인 관찰로 나눠 보세요. 어떻게 앉아 균형을 잡는지, 앞발로 먹이를 어떻게 쥐는지, 귀와 머리를 어떻게 움직이는지 보는 거예요. 먼저 보이는 행동을 적고 나서 느낌을 이야기하면 더 세심하게 바라볼 수 있어요.\n한 행동을 곧바로 사람의 감정으로 해석할 필요는 없어요. 멈춰 있다고 슬픈 것은 아니고 천천히 먹는다고 게으른 것도 아니에요. 편집된 짧은 영상에는 전체 상황이 담기지 않으며 건강 판단에는 전문적인 관찰이 필요해요.\n“본 것”, “아직 모르는 것”, “다음에 볼 것”을 세 줄로 적어 보세요. 키링을 볼 때마다 한 생명이 자기 속도로 살아갈 시간을 존중하는 마음도 떠올려 주면 좋겠어요.",
+      "sources": [],
+      "compare": "panda.jpg",
+      "diagram": {
+        "title": [
+          "给花花的一页观察笔记",
+          "화화를 위한 한 장의 관찰 기록"
+        ],
+        "items": [
+          [
+            "看动作",
+            "행동 보기",
+            "坐姿、前掌、视线",
+            "앉은 자세·앞발·시선"
+          ],
+          [
+            "留疑问",
+            "질문 남기기",
+            "不替她猜心情",
+            "감정을 단정하지 않기"
+          ],
+          [
+            "慢慢看",
+            "천천히 보기",
+            "留出安静的时间",
+            "조용히 지켜볼 시간"
+          ]
+        ]
+      }
+    },
+    {
+      "title": [
+        "16 · 从挂件走向真实的竹林",
+        "16 · 키링에서 진짜 대나무 숲으로"
+      ],
+      "zh": "这份礼物可以有两种观看距离。靠近时，你看见绒毛、黑眼圈和小小的身体；把视线拉远，就会想到照护团队、教育工作和熊猫生活的环境。纪念品的作用不只是把动物变得更可爱，也可以让一次好奇持续得更久。\n如果将来走进基地，不妨给行程留一点空白：看完动物以后，再读一块解释牌，看看照片记录了什么，哪些内容是科学描述，哪些是游客的亲昵比喻。不要把寻找一只明星熊猫变成整段旅程唯一的目标。\n最后再回到手里的花花：它不是一份观察真实动物的替代品，而是一个开头。今天你因一只挂件认识成都，明天也许会因为一个问题，继续认识四川的森林和保护工作。",
+      "ko": "이 선물은 가까이서도, 멀리서도 볼 수 있어요. 가까이서는 털과 검은 눈무늬, 작은 몸이 보이고, 시선을 넓히면 사육팀과 교육 활동, 판다가 살아가는 환경이 떠올라요. 기념품은 귀여움을 간직하는 물건이면서 호기심을 오래 이어 주는 출발점이 될 수 있어요.\n언젠가 기지에 간다면 일정에 여유를 남겨 보세요. 동물을 본 뒤 안내판 하나를 읽으며 무엇이 과학적인 설명이고 무엇이 팬들의 다정한 비유인지 생각해 보는 거예요. 유명한 판다 한 마리를 찾는 것만 여행의 목표가 될 필요는 없어요.\n다시 손안의 화화로 돌아와 봐요. 키링은 실제 생명을 만나는 경험을 대신하지 않아요. 작은 선물로 청두를 알게 된 오늘이, 쓰촨의 숲과 보호 활동을 더 알아보는 내일로 이어지면 좋겠어요.",
+      "sources": [],
+      "image": "panda-map.jpg",
+      "caption": [
+        "再次展开官方导览图：从看见动物，到读懂它的家。图源：成都熊猫基地；非实时位置。",
+        "공식 안내 지도를 다시 펼쳐 봐요. 출처: 청두 판다기지. 실시간 위치가 아니에요."
+      ]
+    }
+  ],
+  "sanxingdui": [
+    {
+      "title": [
+        "16 · 图解：发现一座文明，需要几代人",
+        "16 · 도해: 한 문명을 알아가는 여러 세대"
+      ],
+      "zh": "三星堆的发现不是某一天突然完成的故事。早期玉石器的偶然发现，把人们的注意力引到广汉；1934年的发掘让调查进入考古工作的轨道；1986年两个器物坑的发现，则让大型青铜器群进入公众视野。\n早期发现年份在资料中有不同说法，这里不把争议压缩成一个毫无疑问的日期，而把20世纪二三十年代作为开端。时间线真正想表达的是：偶然发现、系统调查、正式发掘与后续研究，是不同的工作。\n新发现并不会让旧记录失去价值。恰恰相反，器物出土位置、层位和伴随物的记录，是后来的研究者重新提出问题的依据。我们今天看见的博物馆，是许多次接力之后的一站。",
+      "ko": "싼싱두이는 어느 하루에 완성된 발견이 아니에요. 초기의 우연한 옥·석기 발견이 광한에 관심을 모았고, 1934년 발굴이 고고학적 탐구를 이어 갔으며, 1986년 두 유물갱의 발견이 거대한 청동기들을 널리 알렸어요.\n초기 발견 연도는 자료마다 차이가 있어요. 여기서는 논쟁을 하나의 확정된 날짜로 줄이지 않고 1920~30년대를 출발점으로 표시했어요. 우연한 발견, 조사, 발굴, 후속 연구가 서로 다른 단계라는 점을 보여 주는 시간선이에요.\n새로운 발견이 옛 기록을 쓸모없게 만들지는 않아요. 출토 위치와 지층, 함께 발견된 물건의 기록이 다음 세대의 질문을 가능하게 해요. 오늘의 박물관은 여러 세대가 이어 온 탐구의 한 장면이랍니다.",
+      "sources": [
+        "pkuDiscovery"
+      ],
+      "diagram": {
+        "title": [
+          "三星堆考古时间线",
+          "싼싱두이 고고학 시간선"
+        ],
+        "items": [
+          [
+            "1920—30s",
+            "1920~30년대",
+            "早期发现与关注",
+            "초기 발견과 관심"
+          ],
+          [
+            "1934",
+            "1934",
+            "首次正式考古发掘",
+            "첫 정식 고고학 발굴"
+          ],
+          [
+            "1986",
+            "1986",
+            "一、二号坑的突破",
+            "1·2호갱의 중요한 발견"
+          ],
+          [
+            "持续研究",
+            "계속되는 연구",
+            "新证据带来新问题",
+            "새 증거와 새로운 질문"
+          ]
+        ]
+      }
+    },
+    {
+      "title": [
+        "17 · 不只有祭祀坑：把视线还给古城",
+        "17 · 제사갱 너머, 고대 도시를 보기"
+      ],
+      "zh": "三星堆最容易被记住的是青铜面具，但遗址并不只是埋藏珍宝的几个坑。四川省文物考古研究院介绍的遗迹类型包括城墙、建筑基址、墓葬、作坊和器物坑等。它们共同指向一个需要空间组织、生产活动与社会生活的古代聚落。\n如果只盯着最耀眼的青铜器，就容易误以为古人每天都在举行仪式。城墙在哪里、建筑怎样排列、普通陶器如何使用，同样是理解古城的问题。宏大的精神世界，必须放回实际生活的环境里。\n下面的图把“城”“人”“物”“仪式”并列，提醒你在看到一件文物时多问一步：它曾在怎样的空间中被制作、使用和保存？这是一张阅读框架，不是对古城布局的复原图。",
+      "ko": "싼싱두이를 떠올리면 청동 가면이 먼저 생각나지만 유적은 보물을 묻은 몇 개의 구덩이만으로 이루어지지 않아요. 쓰촨성 문물고고연구원은 성벽과 건물터, 무덤, 작업장, 유물갱 등 여러 유적을 소개해요. 생산과 생활, 공간 조직을 갖춘 고대 사회의 흔적이지요.\n눈부신 청동기만 보면 고대 사람들이 매일 의식만 했다고 생각하기 쉬워요. 성벽의 위치, 건물의 배치, 평범한 토기의 쓰임 역시 중요한 질문이에요. 정신세계를 이해하려면 실제 생활환경도 함께 봐야 해요.\n아래 그림은 도시·사람·물건·의례를 함께 생각하는 틀이에요. 유물이 어떤 공간에서 만들어지고 사용되었을지 질문해 보세요. 고대 도시의 실제 배치를 복원한 지도는 아니에요.",
+      "sources": [
+        "sckgSite"
+      ],
+      "diagram": {
+        "title": [
+          "从单件文物，看向一座城",
+          "유물 하나에서 도시 전체로"
+        ],
+        "items": [
+          [
+            "城",
+            "도시",
+            "城墙与建筑",
+            "성벽과 건축"
+          ],
+          [
+            "人",
+            "사람",
+            "生活与生产",
+            "생활과 생산"
+          ],
+          [
+            "物",
+            "물건",
+            "陶、石、玉、铜",
+            "토기·돌·옥·청동"
+          ],
+          [
+            "仪式",
+            "의례",
+            "物品与空间的关系",
+            "물건과 공간의 관계"
+          ]
+        ]
+      }
+    },
+    {
+      "title": [
+        "18 · 大立人：沿着冠、手、衣、台座看",
+        "18 · 대립인: 관·손·옷·받침을 따라 보기"
+      ],
+      "zh": "看大立人时，试着先不寻找一个“正确答案”，而是按顺序看四个位置。冠把头部的轮廓推向高处，双手在身体前方留下醒目的空隙，长衣形成竖直的节奏，台座让整个人像有了被托起的感觉。这样的观看顺序，是本册为你设计的观察方法。\n博物馆资料指出，铜立人像身体中空，由人像与底座组成，并使用分段铸造技术。知道这一点以后，可以再想象工匠的难题：怎样让一件体量很大的作品成形，又让细节和整体保持联系？\n双手曾握什么，仍是很吸引人的问题。但礼物里的发光装置不是考古答案。你收到的小灯，是现代设计把古代造型转化成生活物件的方式；把创作和历史分清，反而能同时欣赏两者。",
+      "ko": "대립인을 볼 때 바로 정답을 찾기보다 네 곳을 차례로 살펴보세요. 관은 머리의 윤곽을 높이고, 몸 앞의 두 손은 눈에 띄는 빈 공간을 만들어요. 긴 옷은 세로 흐름을 만들며 받침은 인물을 들어 올리는 느낌을 줘요. 이 순서는 작은 책자가 제안하는 관찰 방법이에요.\n박물관 소개에 따르면 입상은 내부가 비어 있고 인물과 받침으로 구성되며 부분을 나누어 주조했어요. 커다란 형태를 만들면서 세부와 전체를 연결해야 했던 장인의 과제를 떠올려 볼 수 있어요.\n손에 무엇을 들었는지는 흥미로운 질문이지만, 선물의 조명이 그 답은 아니에요. 작은 등은 고대 형상을 일상으로 옮긴 현대 디자인이에요. 역사와 창작을 구분하면 두 가지를 모두 즐길 수 있어요.",
+      "sources": [
+        "museumProfile"
+      ],
+      "image": "standing.jpg",
+      "caption": [
+        "青铜大立人像：先看整体，再找冠、手、衣和台座。实照来源沿用本册大立人章节。",
+        "청동대립인: 전체를 본 뒤 관·손·옷·받침을 찾아보세요. 사진 출처는 앞의 대립인 장과 같아요."
+      ],
+      "compare": "magnet.jpg",
+      "diagram": {
+        "title": [
+          "四步观察，不替文物填答案",
+          "네 단계 관찰, 답을 단정하지 않기"
+        ],
+        "items": [
+          [
+            "冠",
+            "관",
+            "头部轮廓",
+            "머리의 윤곽"
+          ],
+          [
+            "手",
+            "손",
+            "姿态与空隙",
+            "자세와 빈 공간"
+          ],
+          [
+            "衣",
+            "옷",
+            "线条与纹样",
+            "선과 무늬"
+          ],
+          [
+            "台座",
+            "받침",
+            "承托与整体",
+            "지지와 전체 형태"
+          ]
+        ]
+      }
+    },
+    {
+      "title": [
+        "19 · 纵目面具：先辨形，再读传说",
+        "19 · 종목 가면: 형태를 보고 전설 읽기"
+      ],
+      "zh": "可以把纵目面具当作一张视觉地图：眉毛决定上方的方向感，向前突出的眼睛打破平面，大耳把轮廓向两侧拉开，嘴部又把这些线条连接起来。这些观察并不需要先知道它代表哪位神或祖先。\n不同的三星堆面具并不完全一样。香港故宫的展览里还介绍过带有高耸额饰的纵目面具；不要把某一件展品的额饰、尺寸和解释，套用到所有面具上。看名称之后，还应核对具体照片与出土信息。\n你收到的眼罩保留的是最容易辨识的视觉特征。游戏用这些特征设计谜题，是当代的想象，并不意味着古蜀人曾把它用于“辨鬼”。把游戏放回游戏，把文物放回文物，你能得到两种不同的乐趣。",
+      "ko": "종목 가면을 하나의 시각 지도처럼 살펴보세요. 눈썹은 위쪽 방향을 만들고, 튀어나온 눈은 평면을 깨며, 큰 귀는 윤곽을 양옆으로 넓혀요. 입의 선은 이 형태들을 이어 줘요. 어떤 신이나 조상인지 먼저 정하지 않아도 할 수 있는 관찰이에요.\n싼싱두이의 가면은 모두 같지 않아요. 홍콩고궁 전시에는 높은 이마 장식이 있는 종목 가면도 소개되었어요. 특정 작품의 장식과 크기, 해석을 모든 가면에 적용하지 말고 사진과 출토 정보를 함께 확인해야 해요.\n선물의 안대는 눈에 잘 들어오는 특징을 살린 디자인이에요. 게임에서 이를 귀신 찾기 단서로 활용한 것은 현대의 상상이며 고대의 실제 용도를 뜻하지 않아요. 게임과 유물을 구분하면 서로 다른 즐거움을 발견할 수 있어요.",
+      "sources": [
+        "hkpm"
+      ],
+      "image": "bronze-mask.jpg",
+      "caption": [
+        "把照片中的眉、眼、耳、口逐一找出来，再与柔软眼罩对照。图源：上海大学博物馆。",
+        "사진의 눈썹·눈·귀·입을 찾고 부드러운 안대와 비교해 보세요. 출처: 상하이대학교 박물관."
+      ],
+      "compare": "mask.jpg"
+    },
+    {
+      "title": [
+        "20 · 青铜神树：把目光从底部向上移动",
+        "20 · 청동 신수: 아래에서 위로 시선 옮기기"
+      ],
+      "zh": "神树照片提供了一种和面具不同的观看方式：面具把目光集中在脸上，树形器则让视线沿着主干向上、再顺着枝条展开。下面这张照片展示三星堆一号青铜神树，来自北京大学考古文博学院的介绍页面。\n先看主干与枝条怎样组织空间，再寻找枝端的鸟形和其他细部。可以暂时遮住说明文字，只写下“我实际看见了什么”。随后阅读展签，再区分哪些是形态描述，哪些是关于意义的解释。\n“树连接天地”是一种常见的解读方向，却不能把任何一个古代神话直接当作这件器物的使用说明书。器物本身没有把答案写给我们。欣赏它的复杂形态，也允许一些问题继续开放，是观看古代艺术的一部分。",
+      "ko": "신수 사진은 가면과 다른 시선의 움직임을 제안해요. 가면은 얼굴에 눈길을 모으지만 나무 형태는 줄기를 따라 위로 올라가고 가지를 따라 퍼지게 해요. 아래 사진은 베이징대학교 고고문박학원이 소개한 싼싱두이 1호 청동 신수예요.\n먼저 줄기와 가지가 공간을 어떻게 나누는지 보고, 끝부분의 새 모양과 작은 요소를 찾아보세요. 설명을 잠시 가린 채 실제로 보이는 것을 적은 뒤 전시 설명과 비교해 보아도 좋아요. 형태의 묘사와 의미에 관한 해석을 구분하는 연습이에요.\n나무가 하늘과 땅을 잇는다는 해석은 널리 알려져 있지만 특정 신화를 곧바로 이 유물의 사용 설명서로 삼을 수는 없어요. 복잡한 형태를 감상하면서도 남은 질문을 열어 두는 것 역시 옛 예술을 만나는 방법이에요.",
+      "sources": [
+        "pkuDiscovery",
+        "association"
+      ],
+      "image": "sacred-tree.jpg",
+      "caption": [
+        "三星堆一号青铜神树。图片出处：北京大学考古文博学院《四川广汉三星堆遗址》；文物藏于三星堆博物馆。",
+        "싼싱두이 1호 청동 신수. 사진 출처: 베이징대학교 고고문박학원 싼싱두이 소개. 싼싱두이박물관 소장."
+      ]
+    },
+    {
+      "title": [
+        "21 · 金与青铜：一张脸上的两种材料",
+        "21 · 금과 청동: 한 얼굴의 두 재료"
+      ],
+      "zh": "下面不是一件通体用黄金铸成的头像。香港故宫的藏品说明把它的材料列为青铜、金：金色部分与青铜主体结合，让同一张脸出现明显的材质对比。先辨认金色覆盖了哪些部位，再观察没有覆盖的部分，是读懂它的第一步。\n金色让五官更加醒目，但“醒目”不等于我们已经确定了它的身份。关于金面罩与地位、权威或仪式之间的关系，研究中有不同讨论。看到闪亮的材料，不必立刻把人物称为某位已知的王。\n还可以把这张照片与纵目面具并排看：一个是具有颈部的头像，一个强调夸张的面部造型。它们都来自三星堆，却不是同一种器物。分清对象，才能更好地理解那些相似与不同。",
+      "ko": "아래의 얼굴은 전체를 금으로 만든 조각이 아니에요. 홍콩고궁의 설명은 재료를 청동과 금으로 기록해요. 금빛 부분이 청동 몸체와 결합하여 한 얼굴 안에 뚜렷한 대비를 만들어요. 금이 덮인 곳과 덮이지 않은 곳을 나누어 보는 것이 첫걸음이에요.\n금은 이목구비를 돋보이게 하지만 그것만으로 인물의 신분을 확정할 수는 없어요. 금면과 지위·권위·의례의 관계에는 여러 해석이 있어요. 반짝이는 재료를 보고 곧바로 특정 왕이라고 단정하지 않는 것이 좋아요.\n종목 가면 사진과 비교해 보세요. 하나는 목이 있는 두상이고 다른 하나는 과장된 얼굴 형태가 중심이에요. 같은 싼싱두이 유물이라도 같은 종류는 아니에요. 대상을 구분하면 닮은 점과 차이를 더 잘 이해할 수 있어요.",
+      "sources": [
+        "hkpm",
+        "goldStudy"
+      ],
+      "image": "gold-head.jpg",
+      "caption": [
+        "戴金面罩人头像，青铜、金，三星堆二号坑出土。图源：香港故宫文化博物馆；© 四川广汉三星堆博物馆。",
+        "금면 청동 두상, 청동·금, 싼싱두이 2호갱 출토. 사진: 홍콩고궁문화박물관. © 쓰촨 광한 싼싱두이박물관."
+      ]
+    }
+  ],
+  "comb": [
+    {
+      "title": [
+        "06 · 一把梳子，也能成为历史材料",
+        "06 · 작은 빗도 역사의 자료가 돼요"
+      ],
+      "zh": "宏大的青铜器容易吸引目光，一把梳子却常常被忽略。故宫博物院介绍《中华梳篦六千年》时，强调从种类、造型、装饰和风格的变化观察人与时代的关系。这提醒我们：日用品并不在历史之外。\n一件梳具可以引出许多问题：它方便握持吗？齿的疏密怎样？装饰集中在什么地方？它更像梳理工具，还是也参与了打扮？回答需要具体器物与资料，不能因为有漂亮纹样，就把它归入某个朝代。\n你的这把梳子是现代礼物。我们借它进入梳具文化，而不是把它当作古代出土文物。这样的连接很有趣：每天会碰到的小物，也能让人开始关心很长的时间。",
+      "ko": "거대한 청동기는 눈길을 끌지만 작은 빗은 지나치기 쉬워요. 고궁박물원은 《중화소비육천년》을 소개하며 빗의 종류와 형태, 장식, 양식의 변화로 사람과 시대의 관계를 살핀다고 설명해요. 생활용품도 역사 바깥에 있지 않다는 뜻이에요.\n손에 잡기 편한지, 빗살은 얼마나 촘촘한지, 장식이 어디에 모였는지 질문해 보세요. 머리를 정리하는 도구인지 꾸미는 역할도 했는지 판단하려면 구체적인 자료가 필요해요. 예쁜 무늬만으로 어느 왕조의 물건이라 단정할 수는 없어요.\n누나의 빗은 현대의 선물이에요. 발굴된 옛 유물로 보는 대신 빗의 문화로 들어가는 출발점으로 삼아 봐요. 매일 만지는 작은 물건도 오랜 시간에 대한 호기심을 열어 줄 수 있어요.",
+      "sources": [
+        "combBook"
+      ],
+      "compare": "comb.jpg"
+    },
+    {
+      "title": [
+        "07 · 图解：先看结构，再看装饰",
+        "07 · 도해: 구조를 먼저, 장식은 그다음"
+      ],
+      "zh": "拿起梳子，先把目光放到梳背与齿根。梳背提供握持的空间，齿根连接一排梳齿，齿尖则是使用时需要留意的末端。这些是观察形态的词语，不是在给这件商品做材料鉴定。\n再把视线转向图案：哪里用曲线，哪里有重复，哪一块颜色最明亮？深色的主体与明亮的装饰怎样形成对比？你可以用手指沿着轮廓在空中描一遍，再看看拼图里哪些边缘最容易辨认。\n商品图不能证明具体树种、涂层或工艺。想确认它究竟是什么材质，应查看包装和商家说明，而不是只根据“檀木”这个日常名称猜测。欣赏图案和核对材料，是两件可以同时做好的事。",
+      "ko": "빗을 들고 등 부분과 빗살의 뿌리부터 보세요. 등은 손으로 잡는 공간이고 뿌리는 빗살을 연결하며 끝부분은 사용할 때 살펴야 하는 곳이에요. 이는 형태를 관찰하는 말이며 이 상품의 재료를 감정하는 설명은 아니에요.\n다음에는 무늬를 보세요. 곡선과 반복은 어디에 있고 가장 밝은 색은 무엇인가요? 어두운 몸체와 밝은 장식이 어떻게 대비되는지 살펴보고, 손가락으로 공중에 윤곽을 그려 보세요. 퍼즐에서 찾기 쉬운 모서리도 떠올릴 수 있어요.\n상품 사진만으로 나무의 수종이나 표면 처리, 제작법을 확정할 수 없어요. 정확한 재료는 포장과 판매자의 설명을 확인해야 해요. 무늬를 감상하는 일과 재료를 확인하는 일은 함께 할 수 있어요.",
+      "sources": [],
+      "compare": "comb.jpg",
+      "diagram": {
+        "title": [
+          "梳具观察卡 · 结构示意",
+          "빗 관찰 카드 · 구조 개념도"
+        ],
+        "items": [
+          [
+            "梳背",
+            "빗등",
+            "握持与轮廓",
+            "손잡이와 윤곽"
+          ],
+          [
+            "齿根",
+            "빗살 뿌리",
+            "连接与排列",
+            "연결과 배열"
+          ],
+          [
+            "齿尖",
+            "빗살 끝",
+            "末端与间距",
+            "끝부분과 간격"
+          ],
+          [
+            "纹饰",
+            "장식",
+            "重复与色彩",
+            "반복과 색채"
+          ]
+        ]
+      }
+    },
+    {
+      "title": [
+        "08 · 从工具到工艺：看见制作的人",
+        "08 · 도구에서 공예로: 만든 사람을 생각하기"
+      ],
+      "zh": "梳篦既是工具，也可以是一门持续传承的手艺。常州的官方资料把木梳与篦箕合称为梳篦，并介绍当地制作传统中工序的复杂性。这里引用常州作为中国梳具工艺的一个例子，不表示你收到的梳子产自常州，也不替它认定非遗身份。\n看一件完成的物品时，很容易只看到“好看”。换一个角度，可以想象它从材料到成形、再到表面处理和检查，需要有人不断作判断：怎样安排轮廓，怎样让细部更整齐，怎样兼顾手感与外观。具体做法因材料和产品而异。\n拼图让你重新寻找图案的联系，实物则让你看见设计如何落到手中。把它放回日常，认真使用、按照产品说明照料，也是一种对制作劳动的回应。",
+      "ko": "빗은 도구이면서 이어져 온 공예가 될 수 있어요. 창저우의 공식 자료는 성긴 빗과 참빗을 함께 소개하며 지역 제작 전통의 복잡한 공정을 설명해요. 이는 중국 빗 공예의 한 사례일 뿐, 누나의 빗이 창저우산이거나 무형유산 제품이라는 뜻은 아니에요.\n완성된 물건을 보면 예쁘다는 느낌이 먼저 와요. 조금 더 생각하면 재료가 형태를 얻고 표면 처리와 점검을 거치는 동안 누군가 윤곽과 세부, 촉감과 외관을 계속 판단했을 거예요. 실제 방법은 재료와 제품마다 달라요.\n퍼즐에서는 그림의 연결을 찾고, 실물에서는 디자인이 손안의 물건이 된 모습을 볼 수 있어요. 제품 안내에 맞게 돌보며 일상에서 사용하는 것도 만든 사람의 수고에 응답하는 방법이에요.",
+      "sources": [
+        "combCraft"
+      ],
+      "diagram": {
+        "title": [
+          "理解一件小物的四个角度",
+          "작은 물건을 이해하는 네 시선"
+        ],
+        "items": [
+          [
+            "材料",
+            "재료",
+            "确认，而不猜测",
+            "추측 대신 확인"
+          ],
+          [
+            "形态",
+            "형태",
+            "看整体与细部",
+            "전체와 세부 보기"
+          ],
+          [
+            "装饰",
+            "장식",
+            "读线条与色彩",
+            "선과 색 읽기"
+          ],
+          [
+            "使用",
+            "사용",
+            "让心意进入日常",
+            "마음을 일상으로"
+          ]
+        ]
+      }
+    }
+  ]
+};for(const [key,rows] of Object.entries(CULTURE_FINAL))CULTURE_BOOKS[key].chapters.push(...rows);
+Object.assign(CULTURE_SOURCES,{pkuDiscovery:['北京大学考古文博学院 · 三星堆遗址','https://archaeology.pku.edu.cn/info/1030/3484.htm'],sckgSite:['四川省文物考古研究院 · 广汉三星堆遗址','https://www.sckg.com/shangzhou/1575.html'],museumProfile:['博物中国 · 三星堆博物馆藏品','https://www.museumschina.cn/Museums/Details?id=51068121800003'],goldStudy:['香港故宫 · 三星堆学习资源','https://www.hkpm.org.hk/files/learning-resources/教師資源手冊_8_凝視三星堆——四川考古新發現-1761210301.pdf'],combBook:['故宫博物院 · 中华梳篦六千年','https://www.dpm.org.cn/journal_detail/110946.html'],combCraft:['常州市政府 · 梳篦制作传统','https://www.changzhou.gov.cn/ns_news/847177450468730']});Object.assign(CULTURE_SOURCE_KO,{pkuDiscovery:'베이징대학교 고고문박학원 · 싼싱두이',sckgSite:'쓰촨성 문물고고연구원 · 싼싱두이 유적',museumProfile:'박물중국 · 싼싱두이박물관 소장품',goldStudy:'홍콩고궁 · 싼싱두이 학습 자료',combBook:'고궁박물원 · 중국 빗의 역사',combCraft:'창저우시 정부 · 빗 제작 전통'});
