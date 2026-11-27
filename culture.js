@@ -453,16 +453,51 @@ const CULTURE_BOOKS={
 };
 let cultureLanguage=window.siteLanguage.language;
 function openCulture(kind){
- if(!unlocked)return;cultureLanguage=window.siteLanguage.language;
- const book=CULTURE_BOOKS[kind];if(!book)return;const old=document.querySelector('#culture-dialog');if(old)old.remove();
- const d=document.createElement('dialog');d.id='culture-dialog';d.className='culture-dialog '+book.theme;
- d.innerHTML='<div class="letter-toolbar"><span></span><button class="close" aria-label="关闭文化介绍">×</button></div><div class="culture-body"></div>';
- document.body.append(d);d.querySelector('.close').onclick=()=>d.close();
- function render(){const indices=[cultureLanguage==='zh'?0:1];d.querySelector('.letter-toolbar span').textContent=book.title[indices[0]];d.querySelector('.close').setAttribute('aria-label',window.siteLanguage.pick('关闭文化介绍','이야기 닫기'));const root=d.querySelector('.culture-body');root.replaceChildren();function textPair(parent,tag,texts){indices.forEach(i=>{const el=document.createElement(tag);el.lang=i===0?'zh-CN':'ko';el.textContent=texts[i];parent.append(el);});}
- textPair(root,'h1',book.title);textPair(root,'p',book.subtitle);const overview=document.createElement('p');overview.className='culture-overview';overview.textContent=window.siteLanguage.pick(book.chapters.length+' 个章节 · 图文慢读 · 点击图片查看大图',book.chapters.length+'개 장 · 사진과 함께 읽기 · 사진을 눌러 확대');root.append(overview);
- const nav=document.createElement('nav');nav.className='culture-toc';nav.setAttribute('aria-label',window.siteLanguage.pick('章节目录','목차'));book.chapters.forEach((c,i)=>{const a=document.createElement('button');a.textContent=c.title[indices[0]];a.onclick=()=>root.querySelector('#chapter-'+i).scrollIntoView({behavior:'smooth',block:'start'});nav.append(a);});root.append(nav);
- book.chapters.forEach((c,i)=>{const section=document.createElement('section');section.id='chapter-'+i;textPair(section,'h2',c.title);for(const paragraph of (indices[0]===0?c.zh:c.ko).split('\n')){const p=document.createElement('p');p.textContent=paragraph;section.append(p);}if(c.image){const fig=document.createElement('figure');const link=document.createElement('a');link.href='assets/culture/'+c.image;link.target='_blank';link.rel='noopener';const img=document.createElement('img');img.src=link.href;img.alt=c.caption[indices[0]];img.loading='lazy';link.append(img);fig.append(link);textPair(fig,'figcaption',c.caption);section.append(fig);}if(c.compare){const f=document.createElement('figure');const img=document.createElement('img');img.src='assets/'+c.compare;img.alt=window.siteLanguage.pick('你的文创礼物','누나의 기념품');img.loading='lazy';f.append(img);textPair(f,'figcaption',['对照看看：你收到的文创礼物','비교해 봐요: 누나가 받은 기념품']);section.append(f);}const sources=document.createElement('div');sources.className='culture-sources';c.sources.forEach(key=>{const a=document.createElement('a');a.href=CULTURE_SOURCES[key][1];a.textContent='↗ '+window.siteLanguage.pick(CULTURE_SOURCES[key][0],CULTURE_SOURCE_KO[key]);a.target='_blank';a.rel='noopener';sources.append(a);});section.append(sources);root.append(section);});
- textPair(root,'p',['资料整理于2026年11月27日。图片来源见各图说明与章节链接，版权归原作者或机构；导览和开放安排请以官网最新信息为准。','2026년 11월 27일 자료 정리. 사진 출처는 설명과 링크에 표시했으며 권리는 원저작자·기관에 있어요. 최신 관람 안내는 공식 홈페이지를 확인해 주세요.']);}
- render();d.showModal();const change=()=>{cultureLanguage=window.siteLanguage.language;render();};window.addEventListener('site-language-changed',change);d.addEventListener('close',()=>window.removeEventListener('site-language-changed',change),{once:true});
+ if(!unlocked)return;
+ const book=CULTURE_BOOKS[kind];if(!book)return;
+ document.querySelector('#culture-dialog')?.close();document.querySelector('#culture-dialog')?.remove();
+ const d=document.createElement('dialog');d.id='culture-dialog';d.className='culture-dialog newspaper '+book.theme;
+ let page=0,busy=false,closed=false,animation=null;
+ const pick=(z,k)=>cultureLanguage==='zh'?z:k;
+ const el=(tag,cls,text)=>{const e=document.createElement(tag);if(cls)e.className=cls;if(text!==undefined)e.textContent=text;return e;};
+ d.innerHTML='<header class="letter-toolbar"><span></span><button class="close">×</button></header><div class="paper-desk"><div class="culture-body"></div></div><footer class="paper-controls"><button class="paper-prev"></button><span class="paper-count" role="status" aria-live="polite"></span><button class="paper-next"></button></footer>';
+ document.body.append(d);
+ const root=d.querySelector('.culture-body'),desk=d.querySelector('.paper-desk');
+ d.querySelector('.close').onclick=()=>d.close();
+ function render(){
+  cultureLanguage=window.siteLanguage.language;const l=cultureLanguage==='zh'?0:1,c=book.chapters[page];root.lang=l===0?'zh-CN':'ko';root.replaceChildren();
+  d.querySelector('.letter-toolbar span').textContent=pick('礼物故事 · 阅读时光','선물 이야기 · 읽는 시간');d.querySelector('.close').setAttribute('aria-label',pick('合上报纸','신문 닫기'));
+  const edition=el('div','paper-edition');edition.append(el('span','',pick('2026年11月27日 · 文化特刊','2026년 11월 27일 · 문화 특집')),el('span','',pick('慢慢读，不赶时间','서두르지 말고 천천히')));root.append(edition);
+  const mast=el('header','paper-masthead');mast.append(el('h1','',book.title[l]),el('p','',book.subtitle[l]));root.append(mast);
+  const strip=el('div','paper-strip');strip.append(el('span','',pick('故事 / '+String(page+1).padStart(2,'0'),'이야기 / '+String(page+1).padStart(2,'0'))));
+  const contents=el('details','paper-contents');contents.append(el('summary','',pick('本期目录','이번 호 목차')));const nav=el('nav','culture-toc');nav.setAttribute('aria-label',pick('章节目录','목차'));
+  book.chapters.forEach((ch,i)=>{const b=el('button','',ch.title[l]);b.type='button';b.setAttribute('aria-current',i===page?'page':'false');b.onclick=()=>{contents.open=false;turn(i);};nav.append(b);});contents.append(nav);strip.append(contents);root.append(strip);
+  const section=el('section','paper-article');section.id='chapter-'+page;section.append(el('h2','',c.title[l].replace(/^\d+ · /,'')));
+  const layout=el('div','paper-layout'),copy=el('div','paper-copy');(l===0?c.zh:c.ko).split('\n').forEach(t=>copy.append(el('p','',t)));layout.append(copy);
+  if(c.image||c.compare){const photos=el('aside','paper-photographs');function photo(src,caption){const f=el('figure'),link=el('a');link.href=src;link.target='_blank';link.rel='noopener';const img=el('img');img.src=src;img.alt=caption;img.decoding='async';link.append(img);f.append(link,el('figcaption','',caption));photos.append(f);}if(c.image)photo('assets/culture/'+c.image,c.caption[l]);if(c.compare)photo('assets/'+c.compare,pick('你收到的文创礼物','누나가 받은 기념품'));layout.append(photos);}else layout.classList.add('paper-text-only');
+  section.append(layout);const sources=el('div','culture-sources');c.sources.forEach(key=>{const link=el('a','',pick(CULTURE_SOURCES[key][0],CULTURE_SOURCE_KO[key])+' ↗');link.href=CULTURE_SOURCES[key][1];link.target='_blank';link.rel='noopener';sources.append(link);});section.append(sources);root.append(section);
+  root.append(el('div','paper-imprint',pick('图源与资料见文末链接 · 图片版权归原作者或机构','사진과 자료 출처는 위 링크에 표시 · 저작권은 원저작자 또는 기관에 있어요')));
+  d.querySelector('.paper-prev').textContent=pick('← 前一页','← 이전');d.querySelector('.paper-next').textContent=pick('翻开下一页 →','다음 펼치기 →');
+  d.querySelector('.paper-prev').disabled=page===0;d.querySelector('.paper-next').disabled=page===book.chapters.length-1;
+  d.querySelector('.paper-count').textContent=pick('第 '+(page+1)+' / '+book.chapters.length+' 页',(page+1)+' / '+book.chapters.length+' 쪽');desk.scrollTop=0;
+ }
+ async function turn(next){
+  if(busy||next<0||next>=book.chapters.length||next===page)return;
+  busy=true;const forward=next>page;
+  const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(!reduced){
+   const leaf=root.cloneNode(true);leaf.classList.add('paper-turn-leaf');leaf.setAttribute('aria-hidden','true');leaf.inert=true;leaf.removeAttribute('id');leaf.querySelectorAll('[id]').forEach(e=>e.removeAttribute('id'));leaf.style.height=root.getBoundingClientRect().height+'px';leaf.style.top=(root.offsetTop-desk.scrollTop)+'px';leaf.style.width=root.offsetWidth+'px';leaf.style.left=root.offsetLeft+'px';leaf.style.transformOrigin=forward?'left center':'right center';desk.append(leaf);
+   page=next;render();
+   animation=leaf.animate([{transform:'perspective(1800px) rotateY(0deg)',filter:'brightness(1)',opacity:1},{offset:.55,transform:'perspective(1800px) rotateY('+ (forward?-65:65) +'deg)',filter:'brightness(.78)',opacity:.95},{transform:'perspective(1800px) rotateY('+(forward?-115:115)+'deg)',filter:'brightness(1.05)',opacity:0}],{duration:620,easing:'cubic-bezier(.3,.05,.2,1)',fill:'forwards'});
+   try{await animation.finished;}catch{}leaf.remove();animation=null;
+   if(!closed)root.animate([{transform:'translateY(3px)',opacity:.9},{transform:'translateY(0)',opacity:1}],{duration:180,easing:'ease-out'});
+  }else{page=next;render();}
+  busy=false;
+ }
+ d.querySelector('.paper-prev').onclick=()=>turn(page-1);d.querySelector('.paper-next').onclick=()=>turn(page+1);
+ d.addEventListener('keydown',e=>{if(e.target.closest('summary,nav')||e.altKey||e.ctrlKey||e.metaKey)return;if(e.key==='ArrowRight'||e.key==='ArrowLeft'){e.preventDefault();turn(page+(e.key==='ArrowRight'?1:-1));}});
+ let start=null;desk.addEventListener('touchstart',e=>{if(e.touches.length===1&&!e.target.closest('a,button,summary'))start={x:e.touches[0].clientX,y:e.touches[0].clientY};else start=null;},{passive:true});desk.addEventListener('touchend',e=>{if(!start)return;const dx=e.changedTouches[0].clientX-start.x,dy=e.changedTouches[0].clientY-start.y;start=null;if(Math.abs(dx)>85&&Math.abs(dx)>Math.abs(dy)*1.8)turn(page+(dx<0?1:-1));},{passive:true});
+ const change=()=>{animation?.cancel();render();};window.addEventListener('site-language-changed',change);d.addEventListener('close',()=>{closed=true;animation?.cancel();window.removeEventListener('site-language-changed',change);},{once:true});
+ render();d.showModal();
 }
 function attachCulture(g){const kind=({'panda.jpg':'panda','magnet.jpg':'standing','mask.jpg':'mask','comb.jpg':'comb'})[g.img];if(!kind)return;const area=document.createElement('div');area.className='culture-invite';const h=document.createElement('h3');h.textContent=window.siteLanguage.pick(...CULTURE_BOOKS[kind].title);const b=document.createElement('button');b.className='primary';b.textContent=window.siteLanguage.pick('读一读礼物的故事 ↗','선물 이야기 읽기 ↗');b.onclick=()=>openCulture(kind);area.append(h,b);document.querySelector('#gift-detail').append(area);}
