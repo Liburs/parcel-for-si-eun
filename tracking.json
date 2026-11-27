@@ -6,9 +6,45 @@
   "stage": "korea",
   "state": "in_transit",
   "sync": "ok",
-  "checkedAt": "2026-11-26T19:42:34.573Z",
-  "updatedAt": "2026-11-27T00:38:00+09:00",
+  "checkedAt": "2026-11-27T02:26:37.839Z",
+  "updatedAt": "2026-11-27T09:09:00+09:00",
   "events": [
+    {
+      "time": "2026-11-27T09:09:00+09:00",
+      "timeLabel": "09:09 27-Nov-2026",
+      "description": "承运商更新（展开查看原文）",
+      "descriptionKo": "배송 기록 갱신 (원문 보기)",
+      "original": "Delivery preparation",
+      "location": "BONGHWA",
+      "officeZh": "BONGHWA",
+      "officeKo": "BONGHWA",
+      "country": "KR",
+      "city": null
+    },
+    {
+      "time": "2026-11-27T08:23:00+09:00",
+      "timeLabel": "08:23 27-Nov-2026",
+      "description": "到达邮件处理中心",
+      "descriptionKo": "우편 처리 시설 도착",
+      "original": "Arrival at Office of Exchange",
+      "location": "BONGHWA",
+      "officeZh": "BONGHWA",
+      "officeKo": "BONGHWA",
+      "country": "KR",
+      "city": null
+    },
+    {
+      "time": "2026-11-27T07:02:00+09:00",
+      "timeLabel": "07:02 27-Nov-2026",
+      "description": "离开进口交换局",
+      "descriptionKo": "도착 교환국 출발",
+      "original": "Departure from inward office of exchange",
+      "location": "Andong Mail Center",
+      "officeZh": "Andong Mail Center",
+      "officeKo": "Andong Mail Center",
+      "country": "KR",
+      "city": null
+    },
     {
       "time": "2026-11-27T00:38:00+09:00",
       "timeLabel": "00:38 27-Nov-2026",
