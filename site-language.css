@@ -11,23 +11,5 @@ body > header{flex-wrap:wrap;gap:10px}#site-language-button{white-space:nowrap}.
 
 html[lang=ko] h1,html[lang=ko] h2,html[lang=ko] h3,html[lang=ko] button,html[lang=ko] input,html[lang=ko] summary{font-family:inherit}.quest-dialog .quest-hud{top:var(--quest-bar-height,70px)}.quest-dialog .quest-status{top:calc(var(--quest-bar-height,70px) + var(--quest-hud-height,45px) + 8px)}
 
-.mask-clue-list{display:none}@media(max-width:640px){.mask-clue-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:12px 0}.mask-clue-list button{white-space:pre-line;text-align:start;background:#1d3038;color:#f1e4be;border:1px solid #667f81;border-radius:10px;padding:12px;font-size:14px;line-height:1.7;overflow-wrap:anywhere;min-height:110px}.mask-clue-list button:disabled{opacity:1;color:#d6d9cd}.quest-dialog[data-game=mask] .quest-actions{position:sticky;bottom:0;background:#101c23ed;padding:8px 0;z-index:8}.quest-dialog[data-game=mask] .quest-actions button{flex:1;padding:12px;font-size:14px}}
 
-/* Mask investigation: readable, numbered bronze case files at every viewport. */
-.quest-dialog[data-game=mask]{background:linear-gradient(140deg,#142c30,#0b151e 70%);color:#eee6d3}
-.quest-dialog[data-game=mask] .quest-stage{border:1px solid #9c8656;border-radius:20px;overflow:hidden;box-shadow:0 18px 50px #0005}
-.quest-dialog[data-game=mask] .quest-investigation{background:linear-gradient(110deg,#314b47,#172c32);border-radius:12px;line-height:1.7;position:static}
-.mask-clue-list{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:18px 0}
-.mask-clue-list button{white-space:normal;text-align:start;background:linear-gradient(145deg,#243d40,#12262c);color:#f3e7c7;border:1px solid #60776c;border-radius:14px;padding:14px;min-height:128px;cursor:pointer;transition:border-color .2s,background .2s}
-.mask-clue-list button:hover:not(:disabled){border-color:#efd59a;background:#304b49}
-.mask-clue-list button:focus-visible{outline:3px solid #edd49d;outline-offset:3px}
-.mask-clue-list button:disabled{opacity:1;color:#dcd5bd}
-.mask-person-number{display:block;font-size:15px;letter-spacing:.06em;padding-bottom:9px;border-bottom:1px solid #ffffff20;margin-bottom:10px}
-.mask-trait-chips{display:flex;flex-wrap:wrap;gap:6px;font-size:13px;line-height:1.5}
-.mask-trait-chips>span{padding:4px 7px;border-radius:6px;background:#07191d80;overflow-wrap:anywhere}
-.mask-scan-meter{position:relative;padding:12px 16px;margin:12px 0;color:#e6d5ae;background:#172e33;border:1px solid #566f65;border-radius:10px;font-size:14px;font-variant-numeric:tabular-nums;overflow:hidden}
-.mask-scan-meter[data-active=true]{background:linear-gradient(90deg,#426657 var(--scan),#172e33 var(--scan))}
-.quest-dialog[data-game=mask] .quest-hud{line-height:1.8;border-radius:12px;background:#172c30;color:#efdfb8;padding:14px}
-@media(max-width:640px){.mask-clue-list{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.mask-clue-list button{padding:10px;min-height:142px}.mask-trait-chips{font-size:12px}}
-
-.mask-case-board{display:grid;grid-template-columns:1.25fr 1fr;align-items:start;gap:16px}.mask-case-board .mask-clue-list{grid-template-columns:repeat(2,minmax(0,1fr));margin:0}.mask-case-board .quest-stage{position:sticky;top:135px}.quest-dialog[data-game=mask] .quest-status{position:static;border-radius:10px}.quest-dialog[data-game=mask] .quest-body{padding:18px}.mask-case-board .mask-clue-list button{min-height:112px}@media(max-width:700px){.mask-case-board{display:block}.mask-case-board .quest-stage{position:static;margin-bottom:12px}.quest-dialog[data-game=mask] .quest-stage canvas{max-height:35vh}}
+.mask-energy{display:flex;align-items:center;gap:16px;margin:12px 0;padding:12px 16px;background:#243a39;border:1px solid #7b927e;border-radius:10px;color:#e8dfb9;font-size:14px}.mask-energy span{white-space:nowrap;font-variant-numeric:tabular-nums}.mask-energy progress{flex:1;min-width:60px;height:14px;border:0;border-radius:8px;overflow:hidden;background:#0b1920;accent-color:#b5d291}.mask-energy progress::-webkit-progress-bar{background:#0b1920;border-radius:8px}.mask-energy progress::-webkit-progress-value{background:linear-gradient(90deg,#6a9e81,#d4e7ac);border-radius:8px}.mask-energy progress::-moz-progress-bar{background:#b5d291}@media(max-width:600px){.mask-energy{flex-direction:column;align-items:stretch;gap:8px}.mask-energy progress{width:100%}}
